@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const api_base_url = ProcessingInstruction.env.react_app_api_base_url || 'http://localhost:3000/api';
+const api_base_url = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000/api';
 
 const api = axios.create({
-    baseURL0: api_base_url,
+    baseURL: api_base_url,
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -28,14 +28,16 @@ api.interceptors.response.use(
         return response;
     },
     (error) => {
-        if (error.response && error.response.status === 401) {
+        if (error && error.response && error.response.status === 401) {
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             window.location.href = '/login';
         }
-        return Promise.reject(error.response.data);
+        if (error && error.response && error.response.data) {
+            return Promise.reject(error.response.data);
+        }
+        return Promise.reject({ message: 'network error' });
     }
-    return promise.reject({message; 'network error'});
 );
 
 export default api;
