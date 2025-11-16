@@ -24,7 +24,7 @@ import AdminTicketList from './pages/admin/TicketList';
 import AdminTicketDetail from './pages/admin/TicketDetail';
 
 // Styles
-import './styles/App.css';
+import './style/App.css';
 
 function App() {
   return (

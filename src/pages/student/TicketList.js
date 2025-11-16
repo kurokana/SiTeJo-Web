@@ -1,13 +1,13 @@
-import React, {userState, useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 import { ticketService } from "../../services/ticketService";
-import '../../styles/TicketList.css';
+import '../../style/TicketList.css';
 
 const TicketList = () => {
     const [tickets, setTickets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [pagination, setPagination] = useState(null);
-    const [error, setError] = useState({
+    const [filters, setFilters] = useState({
         status: '',
         priority: '',
         type: '',
@@ -23,14 +23,14 @@ const TicketList = () => {
     const loadTickets = async () => {
         setLoading(true);
         try {
-            const response = await ticketService.getTickets(fileters);
+            const response = await ticketService.getTickets(filters);
             setPagination({
                 current_page: response.data.current_page,
                 last_page: response.data.last_page,
                 total: response.data.total_pages,
             });
         } catch (error) {
-            console.error("Failed to load tickets", err);
+            console.error("Failed to load tickets", error);
         } finally {
             setLoading(false);
         }
@@ -42,6 +42,10 @@ const TicketList = () => {
             [e.target.name]: e.target.value,
             page: 1,
         });
+    };
+
+    const handlePageChange = (newPage) => {
+        setFilters({...filters, page: newPage});
     };
 
     const getStatusBadge = (status) => {

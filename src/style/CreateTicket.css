@@ -1,0 +1,8 @@
+/* CreateTicket.css - using same styles as TicketList since they're related */
+@import './TicketList.css';
+
+/* Additional specific styles for create ticket form if needed */
+.ticket-form {
+  max-width: 800px;
+  margin: 0 auto;
+}

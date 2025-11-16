@@ -1,9 +1,9 @@
 import React, {useState} from "react";
 import {useNavigate, Link} from "react-router-dom";
 import {useAuth} from "../../contexts/AuthContext";
-import '../../styles/Auth.css';
+import '../../style/Auth.css';
 
-const registerPage = () => {
+const RegisterPage = () => {
     const [formData, setFormData] = useState ({
         name: '',
         email: '',
@@ -149,4 +149,6 @@ const registerPage = () => {
             </div>
         </div>
     );
-}
+};
+
+export default RegisterPage;

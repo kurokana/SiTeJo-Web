@@ -1,0 +1,126 @@
+.ticket-detail-container {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.ticket-info {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.ticket-info h2 {
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 24px;
+}
+
+.ticket-meta {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: #e9ecef;
+  color: #495057;
+}
+
+.ticket-description {
+  color: #555;
+  line-height: 1.6;
+  margin: 20px 0;
+  font-size: 16px;
+}
+
+.ticket-date {
+  color: #999;
+  font-size: 14px;
+}
+
+.ticket-history {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.ticket-history h3 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.history-list {
+  border-left: 2px solid #e9ecef;
+  padding-left: 20px;
+}
+
+.history-item {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.history-item::before {
+  content: '';
+  position: absolute;
+  left: -26px;
+  top: 5px;
+  width: 10px;
+  height: 10px;
+  background: #007bff;
+  border-radius: 50%;
+}
+
+.history-item p {
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.history-item span {
+  color: #999;
+  font-size: 14px;
+}
+
+.comment-section {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.comment-section h3 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.comment-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.comment-section textarea {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.comment-section textarea:focus {
+  outline: none;
+  border-color: #007bff;
+}

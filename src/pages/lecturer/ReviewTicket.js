@@ -2,26 +2,26 @@ import React, {useState, useEffect, act} from "react";
 import { useParams, useNavigate, Link  } from "react-router-dom";
 import { ticketService } from "../../services/ticketService";
 import {documentService} from "../../services/documentService";
-import '../../styles/TicketsDetail.css';
+import '../../style/TicketsDetail.css';
 import { all } from "axios";
 
 const ReviewTicket = () => {
     const {id} = useParams();
     const navigate = useNavigate();
     const [ticket, setTicket] = useState(null);
-    const [document, setDocument] = useState(null);
+    const [documents, setDocuments] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [actionsLoading, setActionsLoading] = useState(false);
-    const [note, setNote] = useState("");
+    const [actionLoading, setActionLoading] = useState(false);
+    const [notes, setNotes] = useState("");
     const [showApproveModal, setShowApproveModal] = useState(false);
     const [showRejectModal, setShowRejectModal] = useState(false);
-    const [rejectedReason, setRejectedReason] = useState("");
+    const [rejectionReason, setRejectionReason] = useState("");
 
-    UseEffect(() => {
+    useEffect(() => {
         loadTicketData();
     }, [id]);
 
-    const loadTicketDetail = async () => {
+    const loadTicketData = async () => {
         try {
             const [ticketResponse, documentResponse] = await Promise.all([
                 ticketService.getTicketById(id),
@@ -29,7 +29,7 @@ const ReviewTicket = () => {
             ]);
 
             setTicket(ticketResponse.data);
-            setDocument(documentResponse.data);
+            setDocuments(documentResponse.data || []);
             setNotes(ticketResponse.data.lecturer_note || "");
         } catch (error) {
             console.error("Failed to load ticket data", error);
@@ -39,34 +39,34 @@ const ReviewTicket = () => {
     };
 
     const handleReview = async (action) => {
-        setActionsLoading(true);
+        setActionLoading(true);
         try {
             await ticketService.reviewTicket(id, notes);
-            alert('Tikect moved to review"(id, notes)');
+            alert('Ticket moved to review');
             navigate('/lecturer/dashboard');
         } catch (error) {
-            allert('Failed to review ticket');
+            alert('Failed to review ticket');
         } finally {
-            setActionsLoading(false);
+            setActionLoading(false);
         }
     };
 
     const handleApprove = async () => {
-        setActionsLoading(true);
+        setActionLoading(true);
         try {
-            await ticketService.approveTicket(id, note);
+            await ticketService.approveTicket(id, notes);
             alert('Ticket approved successfully');
             navigate('/lecturer/dashboard');
         } catch (error) {
             alert('Failed to approve ticket');
         } finally {
-            setActionsLoading(false);
+            setActionLoading(false);
             setShowApproveModal(false);
         }
     };
 
     const handleReject = async () => {
-        if (!rejectedReason.trim()) {
+        if (!rejectionReason.trim()) {
             alert ('Please provide a reason for rejection');
             return;
         }

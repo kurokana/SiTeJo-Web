@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { ticketService } from '../../services/ticketService';
-import '../../styles/Dashboard.css';
+import '../../style/Dashboard.css';
 
 const StudentDashboard = () => {
   const { user, logout } = useAuth();

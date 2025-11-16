@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ticketService } from "../../services/ticketService";
-import "../../styles/TicketList.css";
+import "../../style/TicketList.css";
 
 const AdminTicketList = () => {
     const [searchParams] = useSearchParams();

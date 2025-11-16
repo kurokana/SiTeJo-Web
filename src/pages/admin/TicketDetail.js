@@ -2,17 +2,18 @@ import React, {useState, useEffect} from "react";
 import {useParams, useNavigate, Link} from "react-router-dom";
 import {ticketService} from "../../services/ticketService";
 import {documentService} from "../../services/documentService";
-import '../../styles/TicketsDetail.css';
+import '../../style/TicketsDetail.css';
 
 const AdminTicketDetail = () => {
     const {id} = useParams();
     const navigate = useNavigate();
     const [ticket, setTicket] = useState(null);
-    const [document, setDocument] = useState(null);
+    const [documents, setDocuments] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [actionsLoading, setActionsLoading] = useState(false);
-    const [adminNote, setAdminNote] = useState("");
-    const [showCloseModal, setShowCloseModal] = useState(false);
+    const [actionLoading, setActionLoading] = useState(false);
+    const [adminNotes, setAdminNotes] = useState("");
+    const [showCompleteModal, setShowCompleteModal] = useState(false);
+    const canComplete = ticket?.status === 'approved';
 
     useEffect(() => {
         loadTicketDetail();
@@ -26,8 +27,8 @@ const AdminTicketDetail = () => {
             ]);
 
             setTicket(ticketResponse.data);
-            setDocument(documentResponse.data);
-            setAdminNote(ticketResponse.data.admin_note || "");
+            setDocuments(documentResponse.data || []);
+            setAdminNotes(ticketResponse.data.admin_note || "");
         } catch (error) {
             console.error("Failed to load ticket data", error);
         } finally {
@@ -35,19 +36,19 @@ const AdminTicketDetail = () => {
         }
     };
 
-  const handleComplete = async () => {
-    setActionLoading(true);
-    try {
-      await ticketService.completeTicket(id, adminNotes);
-      alert('Ticket completed successfully!');
-      navigate('/admin/tickets');
-    } catch (err) {
-      alert('Failed to complete ticket');
-    } finally {
-      setActionLoading(false);
-      setShowCompleteModal(false);
-    }
-  };
+    const handleComplete = async () => {
+        setActionLoading(true);
+        try {
+        await ticketService.completeTicket(id, adminNotes);
+        alert('Ticket completed successfully!');
+        navigate('/admin/tickets');
+        } catch (err) {
+        alert('Failed to complete ticket');
+        } finally {
+        setActionLoading(false);
+        setShowCompleteModal(false);
+        }
+    };
 
     const handleDelete = async () => {
         if (!window.confirm("Are you sure you want to delete this ticket?")) {

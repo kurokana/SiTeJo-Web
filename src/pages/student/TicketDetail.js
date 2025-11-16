@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ticketService } from '../../services/ticketService';
 import { documentService } from '../../services/documentService';
-import '../../styles/TicketDetail.css';
+import '../../style/TicketsDetail.css';
 
 const TicketDetail = () => {
   const { id } = useParams();

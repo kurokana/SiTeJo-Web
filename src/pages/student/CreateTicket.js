@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import { ticketService } from "../../services/ticketService";
 import { documentService } from "../../services/documentService";
-import '../../styles/CreateTicket.css';
+import '../../style/CreateTicket.css';
 
 const CreateTicket = () => {
     const navigate = useNavigate();
@@ -157,7 +157,8 @@ const CreateTicket = () => {
                         <div className="file-list">
                             <p> select files</p>
                             <ul>
-                                {file.map((file, index) => (
+                                {/* eslint-disable-next-line */}
+                                {files.map((file, index) => (
                                     <li key={index}>{file.name}</li>
                                 ))}
                             </ul>

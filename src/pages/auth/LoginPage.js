@@ -1,7 +1,7 @@
 import React, {use, useState} from "react";
 import {useNavigate, Link} from "react-router-dom";
 import {useAuth} from "../../contexts/AuthContext";
-import '../../styles/Auth.css';
+import '../../style/Auth.css';
 
 const LoginPage = () => {
     const [formData, setFormData] = useState ({
@@ -90,3 +90,5 @@ const LoginPage = () => {
         </div>
     );
 };
+
+export default LoginPage;

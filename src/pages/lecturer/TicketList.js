@@ -1,7 +1,7 @@
 import React, { useState, useEffect} from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ticketService } from "../../services/ticketService";
-import "../../styles/TicketList.css";
+import "../../style/TicketList.css";
 
 const LecturerTicketList = () => {
     const [searchParams] = useSearchParams();
@@ -45,7 +45,11 @@ const LecturerTicketList = () => {
     };
 
     const handlePerPageChange = (newPerPage) => {
-        setFilters({...filters, page:  newPage});
+        setFilters({...filters, per_page: newPerPage, page: 1});
+    };
+
+    const handlePageChange = (newPage) => {
+        setFilters({...filters, page: newPage});
     };
     
     const getStatusBadge = (status) => {
