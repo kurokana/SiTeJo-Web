@@ -47,6 +47,14 @@ export const AuthProvider = ({children}) => {
             const response = await authService.register(userData);
             return response;
         } catch (error) {
+            // Extract validation error messages from Laravel response
+            if (error.response && error.response.data && error.response.data.errors) {
+                const errors = error.response.data.errors;
+                const errorMessages = Object.values(errors).flat().join(' ');
+                throw new Error(errorMessages);
+            } else if (error.response && error.response.data && error.response.data.message) {
+                throw new Error(error.response.data.message);
+            }
             throw error;
         }
     };

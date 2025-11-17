@@ -38,16 +38,18 @@ const RegisterPage = () => {
         setLoading(true);
 
         try {
-            const response = await register(formData);
+            // Map npm to nim_nip for backend compatibility
+            const submitData = {
+                ...formData,
+                nim_nip: formData.npm
+            };
+            delete submitData.npm;
 
-            const role = response.data.user.role;
-            if (role === 'mahasiswa') {
-                navigate('/student/dashboard');
-            } else if (role === 'dosen') {
-                navigate('/lecturer/dashboard');
-            } else if (role === 'admin') {
-                navigate('/admin/dashboard');
-            }
+            await register(submitData);
+            
+            // Redirect to login page after successful registration
+            alert('Registration successful! Please login with your credentials.');
+            navigate('/login');
         } catch (error) {
             setError(error.message || 'Registration failed. Please try again.');
         } finally {

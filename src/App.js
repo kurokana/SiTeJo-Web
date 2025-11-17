@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import Layout from './components/Layout';
 
 // Auth Pages
 import LoginPage from './pages/auth/LoginPage';
@@ -22,6 +23,7 @@ import ReviewTicket from './pages/lecturer/ReviewTicket';
 import AdminDashboard from './pages/admin/Dashboard';
 import AdminTicketList from './pages/admin/TicketList';
 import AdminTicketDetail from './pages/admin/TicketDetail';
+import AdminUsers from './pages/admin/AdminUsers';
 
 // Styles
 import './style/App.css';
@@ -44,7 +46,9 @@ function App() {
               path="/student/dashboard"
               element={
                 <ProtectedRoute allowedRoles={['mahasiswa']}>
-                  <StudentDashboard />
+                  <Layout>
+                    <StudentDashboard />
+                  </Layout>
                 </ProtectedRoute>
               }
             />
@@ -52,7 +56,9 @@ function App() {
               path="/student/tickets"
               element={
                 <ProtectedRoute allowedRoles={['mahasiswa']}>
-                  <TicketList />
+                  <Layout>
+                    <TicketList />
+                  </Layout>
                 </ProtectedRoute>
               }
             />
@@ -60,7 +66,9 @@ function App() {
               path="/student/create-ticket"
               element={
                 <ProtectedRoute allowedRoles={['mahasiswa']}>
-                  <CreateTicket />
+                  <Layout>
+                    <CreateTicket />
+                  </Layout>
                 </ProtectedRoute>
               }
             />
@@ -68,7 +76,9 @@ function App() {
               path="/student/tickets/:id"
               element={
                 <ProtectedRoute allowedRoles={['mahasiswa']}>
-                  <TicketDetail />
+                  <Layout>
+                    <TicketDetail />
+                  </Layout>
                 </ProtectedRoute>
               }
             />
@@ -78,7 +88,9 @@ function App() {
               path="/lecturer/dashboard"
               element={
                 <ProtectedRoute allowedRoles={['dosen']}>
-                  <LecturerDashboard />
+                  <Layout>
+                    <LecturerDashboard />
+                  </Layout>
                 </ProtectedRoute>
               }
             />
@@ -86,7 +98,9 @@ function App() {
               path="/lecturer/tickets"
               element={
                 <ProtectedRoute allowedRoles={['dosen']}>
-                  <LecturerTicketList />
+                  <Layout>
+                    <LecturerTicketList />
+                  </Layout>
                 </ProtectedRoute>
               }
             />
@@ -94,7 +108,9 @@ function App() {
               path="/lecturer/tickets/:id"
               element={
                 <ProtectedRoute allowedRoles={['dosen']}>
-                  <ReviewTicket />
+                  <Layout>
+                    <ReviewTicket />
+                  </Layout>
                 </ProtectedRoute>
               }
             />
@@ -104,7 +120,9 @@ function App() {
               path="/admin/dashboard"
               element={
                 <ProtectedRoute allowedRoles={['admin']}>
-                  <AdminDashboard />
+                  <Layout>
+                    <AdminDashboard />
+                  </Layout>
                 </ProtectedRoute>
               }
             />
@@ -112,7 +130,9 @@ function App() {
               path="/admin/tickets"
               element={
                 <ProtectedRoute allowedRoles={['admin']}>
-                  <AdminTicketList />
+                  <Layout>
+                    <AdminTicketList />
+                  </Layout>
                 </ProtectedRoute>
               }
             />
@@ -120,7 +140,19 @@ function App() {
               path="/admin/tickets/:id"
               element={
                 <ProtectedRoute allowedRoles={['admin']}>
-                  <AdminTicketDetail />
+                  <Layout>
+                    <AdminTicketDetail />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/users"
+              element={
+                <ProtectedRoute allowedRoles={['admin']}>
+                  <Layout>
+                    <AdminUsers />
+                  </Layout>
                 </ProtectedRoute>
               }
             />

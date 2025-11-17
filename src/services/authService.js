@@ -4,19 +4,19 @@ const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
 
 const authService = {
   login: async (credentials) => {
-    const response = await axios.post(`${API_URL}/login`, credentials);
-    if (response.data.token) {
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+    const response = await axios.post(`${API_URL}/auth/login`, credentials);
+    if (response.data.data.token) {
+      localStorage.setItem('token', response.data.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.data.user));
     }
     return response.data;
   },
 
   register: async (userData) => {
-    const response = await axios.post(`${API_URL}/register`, userData);
-    if (response.data.token) {
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+    const response = await axios.post(`${API_URL}/auth/register`, userData);
+    if (response.data.data.token) {
+      localStorage.setItem('token', response.data.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.data.user));
     }
     return response.data;
   },

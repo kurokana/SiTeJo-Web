@@ -73,6 +73,7 @@ const LoginPage = () => {
                             id="password"
                             name="password"
                             value={formData.password}
+                            onChange={handleChange}
                             placeholder="Enter your Password"
                             required
                             />

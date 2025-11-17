@@ -48,13 +48,12 @@ const StudentDashboard = () => {
   return (
     <div className="dashboard-container">
       {/* Header */}
-      <header className="dashboard-header">
+      <div className="dashboard-header">
         <div>
           <h1>Welcome, {user?.name}!</h1>
           <p>Student Dashboard</p>
         </div>
-        <button onClick={logout} className="btn-danger">Logout</button>
-      </header>
+      </div>
 
       {/* Statistics Cards */}
       <div className="stats-grid">

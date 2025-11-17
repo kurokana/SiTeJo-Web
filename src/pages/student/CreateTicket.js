@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { ticketService } from "../../services/ticketService";
 import { documentService } from "../../services/documentService";
 import '../../style/CreateTicket.css';
@@ -71,7 +71,7 @@ const CreateTicket = () => {
         <div className="form-container">
             <div className="form-header">
                 <h1>Create New Ticket</h1>
-                <link to="/student/tickets" className="btn-secondary"></link>
+                <Link to="/student/tickets" className="btn-secondary">Back to Tickets</Link>
             </div>
 
             {error && <div className="alert alert-error">{error}</div>}
@@ -174,9 +174,9 @@ const CreateTicket = () => {
                     >
                         {loading ? 'Creating Ticket...' : 'Create Ticket'}
                     </button>
-                    <link to="/student/tickets" className="btn-secondary">
+                    <Link to="/student/tickets" className="btn-secondary">
                         Cancel
-                    </link>
+                    </Link>
                 </div>
             </form>
         </div>
