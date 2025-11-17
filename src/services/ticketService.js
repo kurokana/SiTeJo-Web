@@ -1,18 +1,18 @@
 import api from './api';
 
 export const ticketService = {
-    getTickets: async (params) => {
+    getTickets: async (filters = {}) => {
         try {
-            const params = new URLSearchParams;
+            const params = new URLSearchParams();
             
-            object.keys(filters).foreach(key => {
+            Object.keys(filters).forEach(key => {
                 if(filters[key]){
                     params.append(key, filters[key]);
                 }
             });
 
             const queryString = params.toString();
-            const url = queryString ? '/tickets?${queryString}' : '/tickets';
+            const url = queryString ? `/tickets?${queryString}` : '/tickets';
 
             return await api.get(url);
         } catch (error) {
@@ -28,6 +28,14 @@ export const ticketService = {
         }
     },
 
+    getLecturers: async () => {
+        try {
+            return await api.get('/tickets/lecturers');
+        } catch (error) {
+            throw error;
+        }
+    },
+
     getTicketById: async (Id) => {
         try {
             return await api.get(`/tickets/${Id}`);
@@ -36,7 +44,7 @@ export const ticketService = {
         }
     },
 
-    createTiket: async (ticketData) => {
+    createTicket: async (ticketData) => {
         try {
             return await api.post('/tickets', ticketData);
         } catch (error) {

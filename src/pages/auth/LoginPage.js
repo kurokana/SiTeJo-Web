@@ -39,7 +39,7 @@ const LoginPage = () => {
                 navigate('/admin/dashboard');
             }
         } catch (error) {
-            setError(error.message || 'login failed. Please check your credentials and try again.');
+            setError(error.message || 'Login gagal. Silakan periksa kredensial Anda dan coba lagi.');
         } finally {
             setLoading(false);
         }
@@ -48,8 +48,8 @@ const LoginPage = () => {
     return (
         <div className = "auth-container">
             <div className="auth-card">
-                <h1>Login</h1>
-                <p className="auth-subtitle">Welcome back! Please login to your account.</p>
+                <h1>Masuk</h1>
+                <p className="auth-subtitle">Selamat datang kembali! Silakan masuk ke akun Anda.</p>
                 
                 {error && <div className="auth-error">{error}</div>}
 
@@ -67,25 +67,25 @@ const LoginPage = () => {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="password">Password</label>
+                        <label htmlFor="password">Kata Sandi</label>
                         <input
                             type="password"
                             id="password"
                             name="password"
                             value={formData.password}
                             onChange={handleChange}
-                            placeholder="Enter your Password"
+                            placeholder="Masukkan kata sandi Anda"
                             required
                             />
                     </div>
 
                     <button type="submit" className="btn-primary" disabled={loading}>
-                        {loading ? 'Logging in...' : 'Login'}
+                        {loading ? 'Masuk...' : 'Masuk'}
                     </button>
                 </form>
 
                 <p className="auth-footer">
-                    Don't have an account? <Link to="/register">Register here</Link>
+                    Belum punya akun? <Link to="/register">Daftar di sini</Link>
                 </p>
             </div>
         </div>

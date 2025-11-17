@@ -26,8 +26,10 @@ const AdminTicketDetail = () => {
                 documentService.getDocumentByTicketId(id)
             ]);
 
-            setTicket(ticketResponse.data);
-            setDocuments(documentResponse.data || []);
+            setTicket(ticketResponse.data.data || ticketResponse.data);
+            
+            const docs = documentResponse.data.data || documentResponse.data || [];
+            setDocuments(Array.isArray(docs) ? docs : []);
             setAdminNotes(ticketResponse.data.admin_note || "");
         } catch (error) {
             console.error("Failed to load ticket data", error);
@@ -40,10 +42,10 @@ const AdminTicketDetail = () => {
         setActionLoading(true);
         try {
         await ticketService.completeTicket(id, adminNotes);
-        alert('Ticket completed successfully!');
+        alert('Tiket berhasil diselesaikan!');
         navigate('/admin/tickets');
         } catch (err) {
-        alert('Failed to complete ticket');
+        alert('Gagal menyelesaikan tiket');
         } finally {
         setActionLoading(false);
         setShowCompleteModal(false);
@@ -51,16 +53,16 @@ const AdminTicketDetail = () => {
     };
 
     const handleDelete = async () => {
-        if (!window.confirm("Are you sure you want to delete this ticket?")) {
+        if (!window.confirm("Apakah Anda yakin ingin menghapus tiket ini?")) {
             return;
         }
 
         try {
             await ticketService.deleteTicket(id);
-            alert("Ticket deleted successfully");
+            alert("Tiket berhasil dihapus");
             navigate('/admin/tickets');
         } catch (error) {
-            alert("Failed to delete ticket");
+            alert("Gagal menghapus tiket");
         }
     };
 
@@ -76,7 +78,7 @@ const AdminTicketDetail = () => {
             document.body.removeChild(link);
             window.URL.revokeObjectURL(url);
         } catch (error) {
-            alert('Failed to download document');
+            alert('Gagal mengunduh dokumen');
         }
     };
 
@@ -96,11 +98,11 @@ const AdminTicketDetail = () => {
       <div className="detail-header">
         <div>
           <h1>{ticket.title}</h1>
-          <p className="ticket-number">Ticket #{ticket.ticket_number}</p>
+          <p className="ticket-number">Tiket #{ticket.ticket_number}</p>
         </div>
         <div className="header-actions">
           <Link to="/admin/tickets" className="btn-secondary">
-            Back to List
+            Kembali
           </Link>
         </div>
       </div>
@@ -108,7 +110,7 @@ const AdminTicketDetail = () => {
       <div className="detail-content">
         {/* Ticket Information */}
         <div className="detail-section">
-          <h3>Ticket Information</h3>
+          <h3>Informasi Tiket</h3>
           <div className="info-grid">
             <div className="info-item">
               <label>Status</label>
@@ -117,34 +119,34 @@ const AdminTicketDetail = () => {
               </span>
             </div>
             <div className="info-item">
-              <label>Priority</label>
+              <label>Prioritas</label>
               <span className="badge">{ticket.priority.toUpperCase()}</span>
             </div>
             <div className="info-item">
-              <label>Type</label>
+              <label>Jenis</label>
               <span>{ticket.type.replace('_', ' ')}</span>
             </div>
             <div className="info-item">
-              <label>Student</label>
+              <label>Mahasiswa</label>
               <span>{ticket.student?.name} ({ticket.student?.nim})</span>
             </div>
             <div className="info-item">
-              <label>Lecturer</label>
+              <label>Dosen</label>
               <span>{ticket.lecturer?.name}</span>
             </div>
             <div className="info-item">
-              <label>Created At</label>
+              <label>Dibuat Pada</label>
               <span>{new Date(ticket.created_at).toLocaleString()}</span>
             </div>
             {ticket.reviewed_at && (
               <div className="info-item">
-                <label>Reviewed At</label>
+                <label>Ditinjau Pada</label>
                 <span>{new Date(ticket.reviewed_at).toLocaleString()}</span>
               </div>
             )}
             {ticket.completed_at && (
               <div className="info-item">
-                <label>Completed At</label>
+                <label>Diselesaikan Pada</label>
                 <span>{new Date(ticket.completed_at).toLocaleString()}</span>
               </div>
             )}
@@ -153,14 +155,14 @@ const AdminTicketDetail = () => {
 
         {/* Description */}
         <div className="detail-section">
-          <h3>Description</h3>
+          <h3>Deskripsi</h3>
           <p className="description-text">{ticket.description}</p>
         </div>
 
         {/* Lecturer Notes */}
         {ticket.lecturer_notes && (
           <div className="detail-section alert-info">
-            <h3>Lecturer Notes</h3>
+            <h3>Catatan Dosen</h3>
             <p>{ticket.lecturer_notes}</p>
           </div>
         )}
@@ -168,7 +170,7 @@ const AdminTicketDetail = () => {
         {/* Rejection Reason */}
         {ticket.rejection_reason && (
           <div className="detail-section alert-danger">
-            <h3>Rejection Reason</h3>
+            <h3>Alasan Penolakan</h3>
             <p>{ticket.rejection_reason}</p>
           </div>
         )}
@@ -176,16 +178,16 @@ const AdminTicketDetail = () => {
         {/* Admin Notes */}
         {ticket.status === 'completed' && ticket.admin_notes ? (
           <div className="detail-section alert-info">
-            <h3>Admin Notes</h3>
+            <h3>Catatan Admin</h3>
             <p>{ticket.admin_notes}</p>
           </div>
         ) : canComplete && (
           <div className="detail-section">
-            <h3>Admin Notes</h3>
+            <h3>Catatan Admin</h3>
             <textarea
               value={adminNotes}
               onChange={(e) => setAdminNotes(e.target.value)}
-              placeholder="Add completion notes..."
+              placeholder="Tambahkan catatan penyelesaian..."
               rows="4"
               className="form-textarea"
             />
@@ -194,9 +196,9 @@ const AdminTicketDetail = () => {
 
         {/* Documents */}
         <div className="detail-section">
-          <h3>Documents</h3>
+          <h3>Dokumen</h3>
           {documents.length === 0 ? (
-            <p className="empty-message">No documents attached</p>
+            <p className="empty-message">Tidak ada dokumen terlampir</p>
           ) : (
             <div className="documents-list">
               {documents.map((doc) => (
@@ -206,14 +208,14 @@ const AdminTicketDetail = () => {
                     <span className="document-meta">
                       {doc.document_type.replace('_', ' ')} • 
                       {(doc.file_size / 1024).toFixed(2)} KB •
-                      Uploaded {new Date(doc.created_at).toLocaleDateString()}
+                      Diunggah {new Date(doc.created_at).toLocaleDateString()}
                     </span>
                   </div>
                   <button
                     onClick={() => handleDownload(doc.id, doc.file_name)}
                     className="btn-link"
                   >
-                    Download
+                    Unduh
                   </button>
                 </div>
               ))}
@@ -230,7 +232,7 @@ const AdminTicketDetail = () => {
                 className="btn-success"
                 disabled={actionLoading}
               >
-                Mark as Completed
+                Tandai Sebagai Selesai
               </button>
             )}
             <button
@@ -238,7 +240,7 @@ const AdminTicketDetail = () => {
               className="btn-danger"
               disabled={actionLoading}
             >
-              Delete Ticket
+              Hapus Tiket
             </button>
           </div>
         )}
@@ -248,21 +250,21 @@ const AdminTicketDetail = () => {
       {showCompleteModal && (
         <div className="modal-overlay">
           <div className="modal">
-            <h2>Complete Ticket</h2>
-            <p>Are you sure you want to mark this ticket as completed?</p>
+            <h2>Selesaikan Tiket</h2>
+            <p>Apakah Anda yakin ingin menandai tiket ini sebagai selesai?</p>
             <div className="modal-actions">
               <button 
                 onClick={handleComplete} 
                 className="btn-success" 
                 disabled={actionLoading}
               >
-                {actionLoading ? 'Processing...' : 'Yes, Complete'}
+                {actionLoading ? 'Memproses...' : 'Ya, Selesaikan'}
               </button>
               <button 
                 onClick={() => setShowCompleteModal(false)} 
                 className="btn-secondary"
               >
-                Cancel
+                Batal
               </button>
             </div>
           </div>

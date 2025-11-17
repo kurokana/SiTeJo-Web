@@ -25,14 +25,22 @@ const AdminTicketList = () => {
         setLoading(true);
         try {
             const response = await ticketService.getTickets(filters);
-            setTickets(response.data.data);
+            
+            // Handle Laravel pagination structure: response.data.data contains pagination object
+            const paginationData = response.data.data || response.data || {};
+            const ticketsArray = paginationData.data || [];
+            
+            setTickets(Array.isArray(ticketsArray) ? ticketsArray : []);
+            
             setPagination({
-                currentPage: response.data.current_page,
-                last_page: response.data.last_page,
-                total: response.data.total,
+                current_page: paginationData.current_page || 1,
+                last_page: paginationData.last_page || 1,
+                total: paginationData.total || 0,
             });
         } catch (error) {
             console.error("Failed to load tickets", error);
+            setTickets([]);
+            setPagination(null);
         } finally {
             setLoading(false);
         }
@@ -51,14 +59,14 @@ const AdminTicketList = () => {
     };
 
     const handleDeleteTicket = async (ticketId) => {
-        if (!window.confirm("Are you sure you want to delete this ticket?")) {
+        if (!window.confirm("Apakah Anda yakin ingin menghapus tiket ini?")) {
             return;
         try {
             await ticketService.deleteTicket(ticketId);
-            alert("Ticket deleted successfully");
+            alert("Tiket berhasil dihapus");
             loadTickets();
         } catch (error) {
-            alert("Failed to delete ticket");
+            alert("Gagal menghapus tiket");
         }
     };
 
@@ -85,9 +93,9 @@ const AdminTicketList = () => {
         return (
             <div className="ticket-list-container">
             <div className="list-header">
-                <h1>All Tickets (Admin)</h1>
+                <h1>Semua Tiket (Admin)</h1>
                 <Link to="/admin/dashboard" className="btn-secondary">
-                Back to Dashboard
+                Kembali ke Dashboard
                 </Link>
             </div>
 
@@ -96,30 +104,30 @@ const AdminTicketList = () => {
                 <input
                 type="text"
                 name="search"
-                placeholder="Search tickets..."
+                placeholder="Cari tiket..."
                 value={filters.search}
                 onChange={handleFilterChange}
                 className="search-input"
                 />
 
                 <select name="status" value={filters.status} onChange={handleFilterChange}>
-                <option value="">All Status</option>
-                <option value="pending">Pending</option>
-                <option value="in_review">In Review</option>
-                <option value="approved">Approved</option>
-                <option value="rejected">Rejected</option>
-                <option value="completed">Completed</option>
+                <option value="">Semua Status</option>
+                <option value="pending">Menunggu</option>
+                <option value="in_review">Sedang Ditinjau</option>
+                <option value="approved">Disetujui</option>
+                <option value="rejected">Ditolak</option>
+                <option value="completed">Selesai</option>
                 </select>
 
                 <select name="priority" value={filters.priority} onChange={handleFilterChange}>
-                <option value="">All Priority</option>
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
+                <option value="">Semua Prioritas</option>
+                <option value="low">Rendah</option>
+                <option value="medium">Sedang</option>
+                <option value="high">Tinggi</option>
                 </select>
 
                 <select name="type" value={filters.type} onChange={handleFilterChange}>
-                <option value="">All Types</option>
+                <option value="">Semua Jenis</option>
                 <option value="surat_keterangan">Surat Keterangan</option>
                 <option value="surat_rekomendasi">Surat Rekomendasi</option>
                 <option value="ijin">Ijin</option>
@@ -129,10 +137,10 @@ const AdminTicketList = () => {
 
             {/* Ticket List */}
             {loading ? (
-                <div className="loading">Loading tickets...</div>
+                <div className="loading">Memuat tiket...</div>
             ) : tickets.length === 0 ? (
                 <div className="empty-state">
-                <p>No tickets found</p>
+                <p>Tidak ada tiket ditemukan</p>
                 </div>
             ) : (
                 <>
@@ -148,7 +156,7 @@ const AdminTicketList = () => {
                         
                         <p className="ticket-number">#{ticket.ticket_number}</p>
                         <p className="ticket-student">
-                        Student: {ticket.student?.name} | Lecturer: {ticket.lecturer?.name}
+                        Mahasiswa: {ticket.student?.name} | Dosen: {ticket.lecturer?.name}
                         </p>
                         
                         <p className="ticket-description">
@@ -169,14 +177,14 @@ const AdminTicketList = () => {
                         </span>
                         <div style={{ display: 'flex', gap: '10px' }}>
                             <Link to={`/admin/tickets/${ticket.id}`} className="btn-link">
-                            View Details →
+                            Lihat Detail →
                             </Link>
                             <button 
                             onClick={() => handleDeleteTicket(ticket.id)}
                             className="btn-danger-link"
                             style={{ background: 'none', border: 'none', cursor: 'pointer' }}
                             >
-                            Delete
+                            Hapus
                             </button>
                         </div>
                         </div>
@@ -192,12 +200,12 @@ const AdminTicketList = () => {
                         disabled={pagination.current_page === 1}
                         className="btn-secondary"
                     >
-                        Previous
+                        Sebelumnya
                     </button>
                     
                     <span className="page-info">
-                        Page {pagination.current_page} of {pagination.last_page} 
-                        ({pagination.total} tickets)
+                        Halaman {pagination.current_page} dari {pagination.last_page} 
+                        ({pagination.total} tiket)
                     </span>
                     
                     <button
@@ -205,7 +213,7 @@ const AdminTicketList = () => {
                         disabled={pagination.current_page === pagination.last_page}
                         className="btn-secondary"
                     >
-                        Next
+                        Selanjutnya
                     </button>
                     </div>
                 )}

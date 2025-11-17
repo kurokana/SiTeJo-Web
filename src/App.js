@@ -180,10 +180,10 @@ const UnauthorizedPage = () => {
       height: '100vh',
       gap: '20px'
     }}>
-      <h1>403 - Unauthorized</h1>
-      <p>You don't have permission to access this page.</p>
+      <h1>403 - Tidak Diizinkan</h1>
+      <p>Anda tidak memiliki izin untuk mengakses halaman ini.</p>
       <a href="/login" style={{ color: '#667eea', textDecoration: 'none', fontWeight: 'bold' }}>
-        Go to Login
+        Ke Halaman Login
       </a>
     </div>
   );
@@ -200,10 +200,10 @@ const NotFoundPage = () => {
       height: '100vh',
       gap: '20px'
     }}>
-      <h1>404 - Page Not Found</h1>
-      <p>The page you're looking for doesn't exist.</p>
+      <h1>404 - Halaman Tidak Ditemukan</h1>
+      <p>Halaman yang Anda cari tidak ada.</p>
       <a href="/login" style={{ color: '#667eea', textDecoration: 'none', fontWeight: 'bold' }}>
-        Go to Login
+        Ke Halaman Login
       </a>
     </div>
   );

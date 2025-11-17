@@ -24,10 +24,12 @@ const TicketDetail = () => {
         documentService.getDocumentsByTicket(id)
       ]);
 
-      setTicket(ticketResponse.data);
-      setDocuments(documentsResponse.data);
+      setTicket(ticketResponse.data.data || ticketResponse.data);
+      
+      const docs = documentsResponse.data.data || documentsResponse.data || [];
+      setDocuments(Array.isArray(docs) ? docs : []);
     } catch (err) {
-      setError('Failed to load ticket details');
+      setError('Gagal memuat detail tiket');
       console.error(err);
     } finally {
       setLoading(false);
@@ -42,9 +44,9 @@ const TicketDetail = () => {
     try {
       await documentService.uploadDocument(id, file, 'supporting_document');
       await loadTicketDetail(); // Reload to show new file
-      alert('File uploaded successfully!');
+      alert('File berhasil diunggah!');
     } catch (err) {
-      alert('Failed to upload file');
+      alert('Gagal mengunggah file');
     } finally {
       setUploadingFile(false);
     }
@@ -62,19 +64,19 @@ const TicketDetail = () => {
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (err) {
-      alert('Failed to download file');
+      alert('Gagal mengunduh file');
     }
   };
 
   const handleDeleteDocument = async (documentId) => {
-    if (!window.confirm('Are you sure you want to delete this document?')) return;
+    if (!window.confirm('Apakah Anda yakin ingin menghapus dokumen ini?')) return;
 
     try {
       await documentService.deleteDocument(documentId);
       await loadTicketDetail();
-      alert('Document deleted successfully!');
+      alert('Dokumen berhasil dihapus!');
     } catch (err) {
-      alert('Failed to delete document');
+      alert('Gagal menghapus dokumen');
     }
   };
 
@@ -89,9 +91,9 @@ const TicketDetail = () => {
     return badges[status] || 'badge-default';
   };
 
-  if (loading) return <div className="loading">Loading...</div>;
+  if (loading) return <div className="loading">Memuat...</div>;
   if (error) return <div className="error-message">{error}</div>;
-  if (!ticket) return <div>Ticket not found</div>;
+  if (!ticket) return <div>Tiket tidak ditemukan</div>;
 
   const canEdit = ticket.status === 'pending' || ticket.status === 'rejected';
 
@@ -100,16 +102,16 @@ const TicketDetail = () => {
       <div className="detail-header">
         <div>
           <h1>{ticket.title}</h1>
-          <p className="ticket-number">Ticket #{ticket.ticket_number}</p>
+          <p className="ticket-number">Tiket #{ticket.ticket_number}</p>
         </div>
         <div className="header-actions">
           {canEdit && (
             <Link to={`/student/tickets/${id}/edit`} className="btn-secondary">
-              Edit Ticket
+              Ubah Tiket
             </Link>
           )}
           <Link to="/student/tickets" className="btn-secondary">
-            Back to List
+            Kembali
           </Link>
         </div>
       </div>
@@ -125,28 +127,28 @@ const TicketDetail = () => {
             </div>
 
             <div className="info-item">
-              <label>Priority</label>
+              <label>Prioritas</label>
               <span className="badge">{ticket.priority.toUpperCase()}</span>
             </div>
 
             <div className="info-item">
-              <label>Type</label>
+              <label>Jenis</label>
               <span>{ticket.type.replace('_', ' ')}</span>
             </div>
 
             <div className="info-item">
-              <label>Created At</label>
+              <label>Dibuat</label>
               <span>{new Date(ticket.created_at).toLocaleString()}</span>
             </div>
 
             <div className="info-item">
-              <label>Lecturer</label>
+              <label>Dosen</label>
               <span>{ticket.lecturer?.name}</span>
             </div>
 
             {ticket.reviewed_at && (
               <div className="info-item">
-                <label>Reviewed At</label>
+                <label>Ditinjau Pada</label>
                 <span>{new Date(ticket.reviewed_at).toLocaleString()}</span>
               </div>
             )}
@@ -154,37 +156,37 @@ const TicketDetail = () => {
         </div>
 
         <div className="detail-section">
-          <h3>Description</h3>
+          <h3>Deskripsi</h3>
           <p className="description-text">{ticket.description}</p>
         </div>
 
         {ticket.lecturer_notes && (
           <div className="detail-section alert-info">
-            <h3>Lecturer Notes</h3>
+            <h3>Catatan Dosen</h3>
             <p>{ticket.lecturer_notes}</p>
           </div>
         )}
 
         {ticket.rejection_reason && (
           <div className="detail-section alert-danger">
-            <h3>Rejection Reason</h3>
+            <h3>Alasan Penolakan</h3>
             <p>{ticket.rejection_reason}</p>
           </div>
         )}
 
         {ticket.admin_notes && (
           <div className="detail-section alert-info">
-            <h3>Admin Notes</h3>
+            <h3>Catatan Admin</h3>
             <p>{ticket.admin_notes}</p>
           </div>
         )}
 
         <div className="detail-section">
           <div className="section-header">
-            <h3>Documents</h3>
+            <h3>Dokumen</h3>
             {canEdit && (
               <label className="btn-primary file-upload-btn">
-                {uploadingFile ? 'Uploading...' : 'Upload Document'}
+                {uploadingFile ? 'Mengunggah...' : 'Unggah Dokumen'}
                 <input
                   type="file"
                   onChange={handleFileUpload}
@@ -197,7 +199,7 @@ const TicketDetail = () => {
           </div>
 
           {documents.length === 0 ? (
-            <p className="empty-message">No documents uploaded yet</p>
+            <p className="empty-message">Belum ada dokumen yang diunggah</p>
           ) : (
             <div className="documents-list">
               {documents.map((doc) => (
@@ -214,14 +216,14 @@ const TicketDetail = () => {
                       onClick={() => handleDownload(doc.id, doc.file_name)}
                       className="btn-link"
                     >
-                      Download
+                      Unduh
                     </button>
                     {canEdit && (
                       <button
                         onClick={() => handleDeleteDocument(doc.id)}
                         className="btn-danger-link"
                       >
-                        Delete
+                        Hapus
                       </button>
                     )}
                   </div>

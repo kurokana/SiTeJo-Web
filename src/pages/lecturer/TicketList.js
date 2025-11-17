@@ -23,14 +23,22 @@ const LecturerTicketList = () => {
         setLoading(true);
         try {
             const response = await ticketService.getTickets(filters);
-            setTickets(response.data.data);
+            
+            // Handle Laravel pagination structure: response.data.data contains pagination object
+            const paginationData = response.data.data || response.data || {};
+            const ticketsArray = paginationData.data || [];
+            
+            setTickets(Array.isArray(ticketsArray) ? ticketsArray : []);
+            
             setPagination({
-                currentPage: response.data.current_page,
-                last_page: response.data.last_page,
-                total: response.data.total,
+                current_page: paginationData.current_page || 1,
+                last_page: paginationData.last_page || 1,
+                total: paginationData.total || 0,
             });
         } catch (error) {
             console.error("Failed to load tickets", error);
+            setTickets([]);
+            setPagination(null);
         } finally {
             setLoading(false);
         }
@@ -75,9 +83,9 @@ const LecturerTicketList = () => {
     return (
         <div className="ticket-list-container">
         <div className="list-header">
-            <h1>All Tickets</h1>
+            <h1>Semua Tiket</h1>
             <Link to="/lecturer/dashboard" className="btn-secondary">
-            Back to Dashboard
+            Kembali ke Dashboard
             </Link>
         </div>
 
@@ -86,35 +94,35 @@ const LecturerTicketList = () => {
             <input
             type="text"
             name="search"
-            placeholder="Search tickets..."
+            placeholder="Cari tiket..."
             value={filters.search}
             onChange={handleFilterChange}
             className="search-input"
             />
 
             <select name="status" value={filters.status} onChange={handleFilterChange}>
-            <option value="">All Status</option>
-            <option value="pending">Pending</option>
-            <option value="in_review">In Review</option>
-            <option value="approved">Approved</option>
-            <option value="rejected">Rejected</option>
-            <option value="completed">Completed</option>
+            <option value="">Semua Status</option>
+            <option value="pending">Menunggu</option>
+            <option value="in_review">Sedang Ditinjau</option>
+            <option value="approved">Disetujui</option>
+            <option value="rejected">Ditolak</option>
+            <option value="completed">Selesai</option>
             </select>
 
             <select name="priority" value={filters.priority} onChange={handleFilterChange}>
-            <option value="">All Priority</option>
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
+            <option value="">Semua Prioritas</option>
+            <option value="low">Rendah</option>
+            <option value="medium">Sedang</option>
+            <option value="high">Tinggi</option>
             </select>
         </div>
 
         {/* Ticket List */}
         {loading ? (
-            <div className="loading">Loading tickets...</div>
+            <div className="loading">Memuat tiket...</div>
         ) : tickets.length === 0 ? (
             <div className="empty-state">
-            <p>No tickets found</p>
+            <p>Tidak ada tiket ditemukan</p>
             </div>
         ) : (
             <>
@@ -129,7 +137,7 @@ const LecturerTicketList = () => {
                     </div>
                     
                     <p className="ticket-number">#{ticket.ticket_number}</p>
-                    <p className="ticket-student">Student: {ticket.student?.name}</p>
+                    <p className="ticket-student">Mahasiswa: {ticket.student?.name}</p>
                     
                     <p className="ticket-description">
                     {ticket.description.substring(0, 100)}
@@ -148,7 +156,7 @@ const LecturerTicketList = () => {
                         {new Date(ticket.created_at).toLocaleDateString()}
                     </span>
                     <Link to={`/lecturer/tickets/${ticket.id}`} className="btn-link">
-                        Review →
+                        Tinjau →
                     </Link>
                     </div>
                 </div>
@@ -163,11 +171,11 @@ const LecturerTicketList = () => {
                     disabled={pagination.current_page === 1}
                     className="btn-secondary"
                 >
-                    Previous
+                    Sebelumnya
                 </button>
                 
                 <span className="page-info">
-                    Page {pagination.current_page} of {pagination.last_page}
+                    Halaman {pagination.current_page} dari {pagination.last_page}
                 </span>
                 
                 <button
@@ -175,7 +183,7 @@ const LecturerTicketList = () => {
                     disabled={pagination.current_page === pagination.last_page}
                     className="btn-secondary"
                 >
-                    Next
+                    Selanjutnya
                 </button>
                 </div>
             )}

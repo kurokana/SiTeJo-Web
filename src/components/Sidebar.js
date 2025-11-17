@@ -17,24 +17,23 @@ const Sidebar = () => {
     return location.pathname === path || location.pathname.startsWith(path + '/');
   };
 
-  // Menu items berdasarkan role
   const getMenuItems = () => {
     if (user?.role === 'mahasiswa') {
       return [
-        { path: '/student/dashboard', icon: '📊', label: 'Dashboard' },
-        { path: '/student/tickets', icon: '🎫', label: 'My Tickets' },
-        { path: '/student/create-ticket', icon: '➕', label: 'Create Ticket' },
+        { path: '/student/dashboard', icon: '📊', label: 'Beranda' },
+        { path: '/student/tickets', icon: '🎫', label: 'Tiket Saya' },
+        { path: '/student/create-ticket', icon: '➕', label: 'Buat Tiket' },
       ];
     } else if (user?.role === 'dosen') {
       return [
-        { path: '/lecturer/dashboard', icon: '📊', label: 'Dashboard' },
-        { path: '/lecturer/tickets', icon: '🎫', label: 'All Tickets' },
+        { path: '/lecturer/dashboard', icon: '📊', label: 'Beranda' },
+        { path: '/lecturer/tickets', icon: '🎫', label: 'Semua Tiket' },
       ];
     } else if (user?.role === 'admin') {
       return [
-        { path: '/admin/dashboard', icon: '📊', label: 'Dashboard' },
-        { path: '/admin/tickets', icon: '🎫', label: 'All Tickets' },
-        { path: '/admin/users', icon: '👥', label: 'Users' },
+        { path: '/admin/dashboard', icon: '📊', label: 'Beranda' },
+        { path: '/admin/tickets', icon: '🎫', label: 'Semua Tiket' },
+        { path: '/admin/users', icon: '👥', label: 'Pengguna' },
       ];
     }
     return [];
@@ -46,7 +45,7 @@ const Sidebar = () => {
     <div className="sidebar">
       <div className="sidebar-header">
         <h2 className="sidebar-logo">📋 SiTeJo</h2>
-        <p className="sidebar-subtitle">Ticketing System</p>
+        <p className="sidebar-subtitle">Sistem Tiket</p>
       </div>
 
       <div className="sidebar-user">
@@ -75,7 +74,7 @@ const Sidebar = () => {
       <div className="sidebar-footer">
         <button onClick={handleLogout} className="btn-logout">
           <span className="nav-icon">🚪</span>
-          <span>Logout</span>
+          <span>Keluar</span>
         </button>
       </div>
     </div>

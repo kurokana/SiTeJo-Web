@@ -18,13 +18,18 @@ const LecturerDashboard = () => {
         try {
             const [statsResponse, ticketResponse] = await Promise.all ([
                 ticketService.getStatistics(),
-                ticketService.getTickets({status: 'pending', page: 1, per_page: 5}),
+                ticketService.getTickets({status: 'in_review', page: 1, per_page: 5}),
             ]);
 
-            setStatistics (statsResponse.data);
-            setTickets (ticketResponse.data.data);
+            setStatistics (statsResponse.data.data || statsResponse.data);
+            
+            // Handle different response structures
+            const ticketsData = ticketResponse.data.data?.data || ticketResponse.data.data || ticketResponse.data || [];
+            setTickets (Array.isArray(ticketsData) ? ticketsData : []);
         } catch (error) {
-            console.error('failed to load dashboard data')
+            console.error('gagal memuat data beranda', error);
+            setStatistics(null);
+            setTickets([]);
         } finally {
             setLoading(false);
         }
@@ -42,15 +47,15 @@ const LecturerDashboard = () => {
     };
 
     if (loading) {
-        return <div className="loading">Loading...</div>;
+        return <div className="loading">Memuat...</div>;
     }
 
     return (
         <div className="dashboard-container">
         <header className="dashboard-header">
             <div>
-            <h1>Welcome, {user?.name}!</h1>
-            <p>Lecturer Dashboard</p>
+            <h1>Selamat datang, {user?.name}!</h1>
+            <p>Beranda Dosen</p>
             </div>
             <button onClick={logout} className="btn-danger">Logout</button>
         </header>
@@ -58,19 +63,19 @@ const LecturerDashboard = () => {
         {/* Statistics */}
         <div className="stats-grid">
             <div className="stat-card">
-            <h3>Total Tickets</h3>
+            <h3>Total Tiket</h3>
             <p className="stat-number">{statistics?.total || 0}</p>
             </div>
             <div className="stat-card stat-pending">
-            <h3>Pending Review</h3>
+            <h3>Menunggu Peninjauan</h3>
             <p className="stat-number">{statistics?.by_status?.pending || 0}</p>
             </div>
             <div className="stat-card stat-review">
-            <h3>In Review</h3>
+            <h3>Sedang Ditinjau</h3>
             <p className="stat-number">{statistics?.by_status?.in_review || 0}</p>
             </div>
             <div className="stat-card stat-approved">
-            <h3>Approved</h3>
+            <h3>Disetujui</h3>
             <p className="stat-number">{statistics?.by_status?.approved || 0}</p>
             </div>
         </div>
@@ -78,18 +83,18 @@ const LecturerDashboard = () => {
         {/* Quick Actions */}
         <div className="quick-actions">
             <Link to="/lecturer/tickets?status=pending" className="btn-primary">
-            Review Pending Tickets
+            Tinjau Tiket Menunggu
             </Link>
             <Link to="/lecturer/tickets" className="btn-secondary">
-            View All Tickets
+            Lihat Semua Tiket
             </Link>
         </div>
 
         {/* Pending Tickets */}
         <div className="recent-tickets">
-            <h2>Pending Tickets Requiring Your Attention</h2>
+            <h2>Tiket Menunggu Perhatian Anda</h2>
             {tickets.length === 0 ? (
-            <p>No pending tickets at the moment.</p>
+            <p>Tidak ada tiket yang menunggu saat ini.</p>
             ) : (
             <div className="tickets-list">
                 {tickets.map((ticket) => (
@@ -106,10 +111,10 @@ const LecturerDashboard = () => {
                     <p className="ticket-number">#{ticket.ticket_number}</p>
                     <p className="ticket-description">{ticket.description}</p>
                     <div className="ticket-footer">
-                    <span>Priority: {ticket.priority}</span>
+                    <span>Prioritas: {ticket.priority}</span>
                     <span>{new Date(ticket.created_at).toLocaleDateString()}</span>
                     <Link to={`/lecturer/tickets/${ticket.id}`} className="btn-link">
-                        Review →
+                        Tinjau →
                     </Link>
                     </div>
                 </div>

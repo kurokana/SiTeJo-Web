@@ -21,10 +21,15 @@ const AdminDashboard = () => {
                 ticketService.getTickets({status: 'approved', page: 1, per_page: 5}),
             ]);
 
-            setStatistics (statsResponse.data);
-            setTickets (ticketResponse.data.data);
+            setStatistics (statsResponse.data.data || statsResponse.data);
+            
+            // Handle different response structures
+            const ticketsData = ticketResponse.data.data?.data || ticketResponse.data.data || ticketResponse.data || [];
+            setTickets (Array.isArray(ticketsData) ? ticketsData : []);
         } catch (error) {
-            console.error('failed to load dashboard data', error)
+            console.error('gagal memuat data beranda', error);
+            setStatistics(null);
+            setTickets([]);
         } finally {
             setLoading(false);
         }
@@ -42,15 +47,15 @@ const AdminDashboard = () => {
     };
 
     if (loading) {
-        return <div className="loading">Loading...</div>;
+        return <div className="loading">Memuat...</div>;
     }
 
   return (
     <div className="dashboard-container">
       <header className="dashboard-header">
         <div>
-          <h1>Admin Dashboard</h1>
-          <p>Welcome, {user?.name}!</p>
+          <h1>Beranda Admin</h1>
+          <p>Selamat datang, {user?.name}!</p>
         </div>
         <button onClick={logout} className="btn-danger">Logout</button>
       </header>
@@ -58,27 +63,27 @@ const AdminDashboard = () => {
       {/* Statistics */}
       <div className="stats-grid">
         <div className="stat-card">
-          <h3>Total Tickets</h3>
+          <h3>Total Tiket</h3>
           <p className="stat-number">{statistics?.total || 0}</p>
         </div>
         <div className="stat-card">
-          <h3>Pending</h3>
+          <h3>Menunggu</h3>
           <p className="stat-number">{statistics?.by_status?.pending || 0}</p>
         </div>
         <div className="stat-card">
-          <h3>In Review</h3>
+          <h3>Sedang Ditinjau</h3>
           <p className="stat-number">{statistics?.by_status?.in_review || 0}</p>
         </div>
         <div className="stat-card">
-          <h3>Approved</h3>
+          <h3>Disetujui</h3>
           <p className="stat-number">{statistics?.by_status?.approved || 0}</p>
         </div>
         <div className="stat-card">
-          <h3>Completed</h3>
+          <h3>Selesai</h3>
           <p className="stat-number">{statistics?.by_status?.completed || 0}</p>
         </div>
         <div className="stat-card">
-          <h3>Rejected</h3>
+          <h3>Ditolak</h3>
           <p className="stat-number">{statistics?.by_status?.rejected || 0}</p>
         </div>
       </div>
@@ -86,18 +91,18 @@ const AdminDashboard = () => {
       {/* Priority Statistics */}
       {statistics?.by_priority && (
         <div className="detail-section">
-          <h2>Tickets by Priority</h2>
+          <h2>Tiket Berdasarkan Prioritas</h2>
           <div className="stats-grid">
             <div className="stat-card">
-              <h3>High Priority</h3>
+              <h3>Prioritas Tinggi</h3>
               <p className="stat-number">{statistics.by_priority.high || 0}</p>
             </div>
             <div className="stat-card">
-              <h3>Medium Priority</h3>
+              <h3>Prioritas Sedang</h3>
               <p className="stat-number">{statistics.by_priority.medium || 0}</p>
             </div>
             <div className="stat-card">
-              <h3>Low Priority</h3>
+              <h3>Prioritas Rendah</h3>
               <p className="stat-number">{statistics.by_priority.low || 0}</p>
             </div>
           </div>
@@ -107,18 +112,18 @@ const AdminDashboard = () => {
       {/* Quick Actions */}
       <div className="quick-actions">
         <Link to="/admin/tickets?status=approved" className="btn-primary">
-          Process Approved Tickets
+          Proses Tiket Disetujui
         </Link>
         <Link to="/admin/tickets" className="btn-secondary">
-          View All Tickets
+          Lihat Semua Tiket
         </Link>
       </div>
 
       {/* Approved Tickets */}
       <div className="recent-tickets">
-        <h2>Recently Approved Tickets</h2>
+        <h2>Tiket yang Baru Disetujui</h2>
         {tickets.length === 0 ? (
-          <p>No approved tickets waiting for completion.</p>
+          <p>Tidak ada tiket yang disetujui menunggu penyelesaian.</p>
         ) : (
           <div className="tickets-list">
             {tickets.map((ticket) => (
@@ -127,7 +132,7 @@ const AdminDashboard = () => {
                   <div>
                     <h3>{ticket.title}</h3>
                     <p className="ticket-student">
-                      Student: {ticket.student?.name} | Lecturer: {ticket.lecturer?.name}
+                      Mahasiswa: {ticket.student?.name} | Dosen: {ticket.lecturer?.name}
                     </p>
                   </div>
                   <span className={`badge ${getStatusBadge(ticket.status)}`}>
@@ -137,10 +142,10 @@ const AdminDashboard = () => {
                 <p className="ticket-number">#{ticket.ticket_number}</p>
                 <p className="ticket-description">{ticket.description}</p>
                 <div className="ticket-footer">
-                  <span>Priority: {ticket.priority}</span>
+                  <span>Prioritas: {ticket.priority}</span>
                   <span>{new Date(ticket.created_at).toLocaleDateString()}</span>
                   <Link to={`/admin/tickets/${ticket.id}`} className="btn-link">
-                    Process →
+                    Proses →
                   </Link>
                 </div>
               </div>

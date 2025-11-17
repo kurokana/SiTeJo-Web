@@ -29,7 +29,19 @@ export const AuthProvider = ({children}) => {
             setUser(response.data.user);
             return response;
         } catch (error) {
-            throw error;
+            // Extract validation error messages from Laravel response
+            if (error.response && error.response.data && error.response.data.errors) {
+                const errors = error.response.data.errors;
+                const errorMessages = Object.values(errors).flat().join(' ');
+                throw new Error(errorMessages);
+            } else if (error.response && error.response.data && error.response.data.message) {
+                throw new Error(error.response.data.message);
+            } else if (error.response && error.response.status === 422) {
+                throw new Error('Data yang Anda masukkan tidak valid. Silakan periksa kembali.');
+            } else if (error.response && error.response.status === 401) {
+                throw new Error('Email atau kata sandi salah.');
+            }
+            throw new Error('Terjadi kesalahan saat login. Silakan coba lagi.');
         }
     };
 

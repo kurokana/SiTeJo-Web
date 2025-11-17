@@ -24,11 +24,15 @@ const TicketList = () => {
         setLoading(true);
         try {
             const response = await ticketService.getTickets(filters);
-            setTickets(response.data.data || []);
+            // Laravel pagination: response.data.data contains pagination object with data array
+            const paginationData = response.data.data || response.data || {};
+            const ticketsArray = paginationData.data || [];
+            
+            setTickets(Array.isArray(ticketsArray) ? ticketsArray : []);
             setPagination({
-                current_page: response.data.current_page,
-                last_page: response.data.last_page,
-                total: response.data.total,
+                current_page: paginationData.current_page || 1,
+                last_page: paginationData.last_page || 1,
+                total: paginationData.total || 0,
             });
         } catch (error) {
             console.error("Failed to load tickets", error);
@@ -73,7 +77,7 @@ const TicketList = () => {
     if (loading) {
         return (
             <div className="ticket-list-container">
-                <div className="loading">Loading tickets...</div>
+                <div className="loading">Memuat tiket...</div>
             </div>
         );
     }
@@ -81,10 +85,10 @@ const TicketList = () => {
     return (
         <div className="ticket-list-container">
             {/* Header */}
-            <div className="ticket-header">
-                <h1>My Tickets</h1>
+            <div className="list-header">
+                <h1>Tiket Saya</h1>
                 <Link to="/student/create-ticket" className="btn-primary">
-                    Create New Ticket
+                    ➕ Buat Tiket Baru
                 </Link>
             </div>
 
@@ -93,7 +97,7 @@ const TicketList = () => {
                 <input
                     type="text"
                     name="search"
-                    placeholder="Search tickets..."
+                    placeholder="Cari tiket..."
                     value={filters.search}
                     onChange={handleFilterChange}
                     className="search-input"
@@ -104,12 +108,12 @@ const TicketList = () => {
                     value={filters.status} 
                     onChange={handleFilterChange}
                 >
-                    <option value="">All Status</option>
-                    <option value="pending">Pending</option>
-                    <option value="in_review">In Review</option>
-                    <option value="approved">Approved</option>
-                    <option value="rejected">Rejected</option>
-                    <option value="completed">Completed</option>
+                    <option value="">Semua Status</option>
+                    <option value="pending">Menunggu</option>
+                    <option value="in_review">Sedang Ditinjau</option>
+                    <option value="approved">Disetujui</option>
+                    <option value="rejected">Ditolak</option>
+                    <option value="completed">Selesai</option>
                 </select>
 
                 <select 
@@ -117,10 +121,10 @@ const TicketList = () => {
                     value={filters.priority} 
                     onChange={handleFilterChange}
                 >
-                    <option value="">All Priority</option>
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
+                    <option value="">Semua Prioritas</option>
+                    <option value="low">Rendah</option>
+                    <option value="medium">Sedang</option>
+                    <option value="high">Tinggi</option>
                 </select>
 
                 <select 
@@ -128,7 +132,7 @@ const TicketList = () => {
                     value={filters.type} 
                     onChange={handleFilterChange}
                 >
-                    <option value="">All Types</option>
+                    <option value="">Semua Jenis</option>
                     <option value="surat-rekomendasi">Surat Rekomendasi</option>
                     <option value="surat-keterangan">Surat Keterangan</option>
                     <option value="izin-penelitian">Izin Penelitian</option>
@@ -139,9 +143,9 @@ const TicketList = () => {
             {/* Tickets List */}
             {tickets.length === 0 ? (
                 <div className="empty-state">
-                    <p>No tickets found</p>
+                    <p>Tidak ada tiket ditemukan</p>
                     <Link to="/student/create-ticket" className="btn-primary">
-                        Create Your First Ticket
+                        Buat Tiket Pertama Anda
                     </Link>
                 </div>
             ) : (
@@ -191,11 +195,11 @@ const TicketList = () => {
                                 disabled={pagination.current_page === 1}
                                 className="btn-secondary"
                             >
-                                Previous
+                                Sebelumnya
                             </button>
 
                             <span className="page-info">
-                                Page {pagination.current_page} of {pagination.last_page}
+                                Halaman {pagination.current_page} dari {pagination.last_page}
                             </span>
 
                             <button
@@ -203,7 +207,7 @@ const TicketList = () => {
                                 disabled={pagination.current_page === pagination.last_page}
                                 className="btn-secondary"
                             >
-                                Next
+                                Selanjutnya
                             </button>
                         </div>            
                     )}

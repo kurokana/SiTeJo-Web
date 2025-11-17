@@ -21,10 +21,15 @@ const StudentDashboard = () => {
         ticketService.getTickets({ page: 1, per_page: 5 })
       ]);
 
-      setStatistics(statsResponse.data);
-      setTickets(ticketsResponse.data.data);
+      setStatistics(statsResponse.data.data || statsResponse.data);
+      
+      // Handle different response structures
+      const ticketsData = ticketsResponse.data.data?.data || ticketsResponse.data.data || ticketsResponse.data || [];
+      setTickets(Array.isArray(ticketsData) ? ticketsData : []);
     } catch (error) {
-      console.error('Failed to load dashboard data:', error);
+      console.error('gagal memuat data beranda:', error);
+      setStatistics(null);
+      setTickets([]);
     } finally {
       setLoading(false);
     }
@@ -42,7 +47,7 @@ const StudentDashboard = () => {
   };
 
   if (loading) {
-    return <div className="loading">Loading...</div>;
+    return <div className="loading">Memuat...</div>;
   }
 
   return (
@@ -50,27 +55,27 @@ const StudentDashboard = () => {
       {/* Header */}
       <div className="dashboard-header">
         <div>
-          <h1>Welcome, {user?.name}!</h1>
-          <p>Student Dashboard</p>
+          <h1>Selamat datang, {user?.name}!</h1>
+          <p>Beranda Mahasiswa</p>
         </div>
       </div>
 
       {/* Statistics Cards */}
       <div className="stats-grid">
         <div className="stat-card">
-          <h3>Total Tickets</h3>
+          <h3>Total Tiket</h3>
           <p className="stat-number">{statistics?.total || 0}</p>
         </div>
         <div className="stat-card">
-          <h3>Pending</h3>
+          <h3>Menunggu</h3>
           <p className="stat-number">{statistics?.by_status?.pending || 0}</p>
         </div>
         <div className="stat-card">
-          <h3>Approved</h3>
+          <h3>Disetujui</h3>
           <p className="stat-number">{statistics?.by_status?.approved || 0}</p>
         </div>
         <div className="stat-card">
-          <h3>Completed</h3>
+          <h3>Selesai</h3>
           <p className="stat-number">{statistics?.by_status?.completed || 0}</p>
         </div>
       </div>
@@ -78,18 +83,18 @@ const StudentDashboard = () => {
       {/* Quick Actions */}
       <div className="quick-actions">
         <Link to="/student/create-ticket" className="btn-primary">
-          Create New Ticket
+          Buat Tiket Baru
         </Link>
         <Link to="/student/tickets" className="btn-secondary">
-          View All Tickets
+          Lihat Semua Tiket
         </Link>
       </div>
 
       {/* Recent Tickets */}
       <div className="recent-tickets">
-        <h2>Recent Tickets</h2>
+        <h2>Tiket Terbaru</h2>
         {tickets.length === 0 ? (
-          <p>No tickets found. Create your first ticket!</p>
+          <p>Tidak ada tiket. Buat tiket pertama Anda!</p>
         ) : (
           <div className="tickets-list">
             {tickets.map((ticket) => (
@@ -103,7 +108,7 @@ const StudentDashboard = () => {
                 <p className="ticket-number">#{ticket.ticket_number}</p>
                 <p className="ticket-description">{ticket.description}</p>
                 <div className="ticket-footer">
-                  <span>Priority: {ticket.priority}</span>
+                  <span>Prioritas: {ticket.priority}</span>
                   <span>{new Date(ticket.created_at).toLocaleDateString()}</span>
                   <Link to={`/student/tickets/${ticket.id}`}>View Details</Link>
                 </div>

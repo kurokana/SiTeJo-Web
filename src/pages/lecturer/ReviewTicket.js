@@ -28,11 +28,17 @@ const ReviewTicket = () => {
                 documentService.getDocumentByTicketId(id)
             ]);
 
-            setTicket(ticketResponse.data);
-            setDocuments(documentResponse.data || []);
-            setNotes(ticketResponse.data.lecturer_note || "");
+            const ticketData = ticketResponse.data.data || ticketResponse.data;
+            setTicket(ticketData);
+            
+            const docs = documentResponse.data.data || documentResponse.data || [];
+            setDocuments(Array.isArray(docs) ? docs : []);
+            
+            setNotes(ticketData.lecturer_note || "");
         } catch (error) {
             console.error("Failed to load ticket data", error);
+            setTicket(null);
+            setDocuments([]);
         } finally {
             setLoading(false);
         }
@@ -42,10 +48,10 @@ const ReviewTicket = () => {
         setActionLoading(true);
         try {
             await ticketService.reviewTicket(id, notes);
-            alert('Ticket moved to review');
+            alert('Tiket berhasil ditinjau');
             navigate('/lecturer/dashboard');
         } catch (error) {
-            alert('Failed to review ticket');
+            alert('Gagal meninjau tiket');
         } finally {
             setActionLoading(false);
         }
@@ -55,10 +61,10 @@ const ReviewTicket = () => {
         setActionLoading(true);
         try {
             await ticketService.approveTicket(id, notes);
-            alert('Ticket approved successfully');
+            alert('Tiket berhasil disetujui');
             navigate('/lecturer/dashboard');
         } catch (error) {
-            alert('Failed to approve ticket');
+            alert('Gagal menyetujui tiket');
         } finally {
             setActionLoading(false);
             setShowApproveModal(false);
@@ -67,17 +73,17 @@ const ReviewTicket = () => {
 
     const handleReject = async () => {
         if (!rejectionReason.trim()) {
-            alert ('Please provide a reason for rejection');
+            alert ('Harap berikan alasan penolakan');
             return;
         }
 
         setActionLoading(true);
         try {
         await ticketService.rejectTicket(id, rejectionReason);
-        alert('Ticket rejected');
+        alert('Tiket ditolak');
         navigate('/lecturer/tickets');
         } catch (err) {
-        alert('Failed to reject ticket');
+        alert('Gagal menolak tiket');
         } finally {
         setActionLoading(false);
         setShowRejectModal(false);
@@ -96,12 +102,12 @@ const ReviewTicket = () => {
             document.body.removeChild(link);
             window.URL.revokeObjectURL(url);
         } catch (error) {
-            alert('Failed to download document');
+            alert('Gagal mengunduh dokumen');
         }
     };
 
-    if (loading) return <div className="loading">Loading...</div>;
-    if (!ticket) return <div className="error">Ticket not found</div>;
+    if (loading) return <div className="loading">Memuat...</div>;
+    if (!ticket) return <div className="error">Tiket tidak ditemukan</div>;
 
     const canTakeAction = ticket.status === 'pending' || ticket.status === 'in_review';
 
@@ -110,11 +116,11 @@ const ReviewTicket = () => {
       <div className="detail-header">
         <div>
           <h1>{ticket.title}</h1>
-          <p className="ticket-number">Ticket #{ticket.ticket_number}</p>
-          <p>Student: {ticket.student?.name} ({ticket.student?.nim})</p>
+          <p className="ticket-number">Tiket #{ticket.ticket_number}</p>
+          <p>Mahasiswa: {ticket.student?.name} ({ticket.student?.nim})</p>
         </div>
         <Link to="/lecturer/tickets" className="btn-secondary">
-          Back to List
+          Kembali
         </Link>
       </div>
 
@@ -127,15 +133,15 @@ const ReviewTicket = () => {
               <span className="badge">{ticket.status}</span>
             </div>
             <div className="info-item">
-              <label>Priority</label>
+              <label>Prioritas</label>
               <span className="badge">{ticket.priority}</span>
             </div>
             <div className="info-item">
-              <label>Type</label>
+              <label>Jenis</label>
               <span>{ticket.type.replace('_', ' ')}</span>
             </div>
             <div className="info-item">
-              <label>Created At</label>
+              <label>Dibuat Pada</label>
               <span>{new Date(ticket.created_at).toLocaleString()}</span>
             </div>
           </div>
@@ -143,15 +149,15 @@ const ReviewTicket = () => {
 
         {/* Description */}
         <div className="detail-section">
-          <h3>Description</h3>
+          <h3>Deskripsi</h3>
           <p className="description-text">{ticket.description}</p>
         </div>
 
         {/* Documents */}
         <div className="detail-section">
-          <h3>Documents</h3>
+          <h3>Dokumen</h3>
           {documents.length === 0 ? (
-            <p>No documents attached</p>
+            <p>Tidak ada dokumen terlampir</p>
           ) : (
             <div className="documents-list">
               {documents.map((doc) => (
@@ -166,7 +172,7 @@ const ReviewTicket = () => {
                     onClick={() => handleDownload(doc.id, doc.file_name)}
                     className="btn-link"
                   >
-                    Download
+                    Unduh
                   </button>
                 </div>
               ))}
@@ -177,11 +183,11 @@ const ReviewTicket = () => {
         {/* Lecturer Notes */}
         {canTakeAction && (
           <div className="detail-section">
-            <h3>Your Notes</h3>
+            <h3>Catatan Anda</h3>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="Add your notes here..."
+              placeholder="Tambahkan catatan Anda di sini..."
               rows="4"
               className="form-textarea"
             />
@@ -197,7 +203,7 @@ const ReviewTicket = () => {
                 className="btn-info"
                 disabled={actionLoading}
               >
-                Move to Review
+                Pindahkan ke Tinjau
               </button>
             )}
             <button
@@ -205,14 +211,14 @@ const ReviewTicket = () => {
               className="btn-success"
               disabled={actionLoading}
             >
-              Approve
+              Setujui
             </button>
             <button
               onClick={() => setShowRejectModal(true)}
               className="btn-danger"
               disabled={actionLoading}
             >
-              Reject
+              Tolak
             </button>
           </div>
         )}
@@ -222,14 +228,14 @@ const ReviewTicket = () => {
       {showApproveModal && (
         <div className="modal-overlay">
           <div className="modal">
-            <h2>Approve Ticket</h2>
-            <p>Are you sure you want to approve this ticket?</p>
+            <h2>Setujui Tiket</h2>
+            <p>Apakah Anda yakin ingin menyetujui tiket ini?</p>
             <div className="modal-actions">
               <button onClick={handleApprove} className="btn-success" disabled={actionLoading}>
-                {actionLoading ? 'Processing...' : 'Yes, Approve'}
+                {actionLoading ? 'Memproses...' : 'Ya, Setujui'}
               </button>
               <button onClick={() => setShowApproveModal(false)} className="btn-secondary">
-                Cancel
+                Batal
               </button>
             </div>
           </div>
@@ -240,21 +246,21 @@ const ReviewTicket = () => {
       {showRejectModal && (
         <div className="modal-overlay">
           <div className="modal">
-            <h2>Reject Ticket</h2>
-            <p>Please provide a reason for rejection:</p>
+            <h2>Tolak Tiket</h2>
+            <p>Harap berikan alasan penolakan:</p>
             <textarea
               value={rejectionReason}
               onChange={(e) => setRejectionReason(e.target.value)}
-              placeholder="Rejection reason..."
+              placeholder="Alasan penolakan..."
               rows="4"
               className="form-textarea"
             />
             <div className="modal-actions">
               <button onClick={handleReject} className="btn-danger" disabled={actionLoading}>
-                {actionLoading ? 'Processing...' : 'Reject Ticket'}
+                {actionLoading ? 'Memproses...' : 'Tolak Tiket'}
               </button>
               <button onClick={() => setShowRejectModal(false)} className="btn-secondary">
-                Cancel
+                Batal
               </button>
             </div>
           </div>

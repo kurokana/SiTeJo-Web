@@ -31,7 +31,7 @@ const RegisterPage = () => {
         setError('');
 
         if (formData.password !== formData.password_confirmation) {
-            setError('Passwords do not match');
+            setError('Kata sandi tidak cocok');
             return;
         }
 
@@ -48,10 +48,10 @@ const RegisterPage = () => {
             await register(submitData);
             
             // Redirect to login page after successful registration
-            alert('Registration successful! Please login with your credentials.');
+            alert('Pendaftaran berhasil! Silakan masuk dengan kredensial Anda.');
             navigate('/login');
         } catch (error) {
-            setError(error.message || 'Registration failed. Please try again.');
+            setError(error.message || 'Pendaftaran gagal. Silakan coba lagi.');
         } finally {
             setLoading(false);
         }
@@ -60,14 +60,14 @@ const RegisterPage = () => {
     return (
         <div className = "auth-container">
             <div className="auth-card">
-                <h1>Register</h1>
-                <p className="auth-subtitle">Create your account.</p>
+                <h1>Daftar</h1>
+                <p className="auth-subtitle">Buat akun Anda.</p>
 
                 {error && <div className="auth-error">{error}</div>}
 
                 <form onSubmit={handleSubmit}>
                     <div className="auth-form-group">
-                        <label htmlFor="name">Full Name</label>
+                        <label htmlFor="name">Nama Lengkap</label>
                         <input 
                             type="text"
                             id="name"
@@ -103,7 +103,7 @@ const RegisterPage = () => {
                     </div>
 
                     <div className="auth-form-group">
-                        <label htmlFor="phone">Phone Number</label>
+                        <label htmlFor="phone">Nomor Telepon</label>
                         <input
                             type="text"
                             id="phone"
@@ -115,7 +115,7 @@ const RegisterPage = () => {
                     </div>
 
                     <div className="auth-form-group">
-                        <label htmlFor="password">Password</label>
+                        <label htmlFor="password">Kata Sandi</label>
                         <input
                             type="password"
                             id="password"
@@ -128,7 +128,7 @@ const RegisterPage = () => {
                     </div>
 
                     <div className="auth-form-group">
-                        <label htmlFor="password_confirmation">Confirm Password</label>
+                        <label htmlFor="password_confirmation">Konfirmasi Kata Sandi</label>
                         <input
                             type="password"
                             id="password_confirmation"
@@ -141,12 +141,12 @@ const RegisterPage = () => {
                     </div>
 
                     <button type="submit" className="btn-primary" disabled={loading}>
-                        {loading ? 'Creating Account...' : 'Register'}
+                        {loading ? 'Membuat Akun...' : 'Daftar'}
                     </button>
                 </form>
 
                 <p className="auth-footer">
-                    Already have an account? <Link to="/login">Login here</Link>
+                    Sudah punya akun? <Link to="/login">Masuk di sini</Link>
                 </p>
             </div>
         </div>

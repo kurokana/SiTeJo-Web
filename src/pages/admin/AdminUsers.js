@@ -38,7 +38,7 @@ const AdminUsers = () => {
                 setUsers(response.data.data);
             }
         } catch (error) {
-            setError(error.response?.data?.message || 'Failed to load users');
+            setError(error.response?.data?.message || 'Gagal memuat pengguna');
         } finally {
             setLoading(false);
         }
@@ -86,7 +86,7 @@ const AdminUsers = () => {
         setError('');
 
         if (!formData.password || formData.password.length < 8) {
-            setError('Password must be at least 8 characters');
+            setError('Kata sandi minimal 8 karakter');
             return;
         }
 
@@ -106,12 +106,12 @@ const AdminUsers = () => {
             if (response.data.success) {
                 setShowCreateModal(false);
                 loadUsers();
-                alert('User created successfully');
+                alert('Pengguna berhasil dibuat');
             }
         } catch (error) {
             const errorMsg = error.response?.data?.errors 
                 ? Object.values(error.response.data.errors).flat().join(' ')
-                : error.response?.data?.message || 'Failed to create user';
+                : error.response?.data?.message || 'Gagal membuat pengguna';
             setError(errorMsg);
         }
     };
@@ -138,12 +138,12 @@ const AdminUsers = () => {
             if (response.data.success) {
                 setShowEditModal(false);
                 loadUsers();
-                alert('User updated successfully');
+                alert('Pengguna berhasil diperbarui');
             }
         } catch (error) {
             const errorMsg = error.response?.data?.errors 
                 ? Object.values(error.response.data.errors).flat().join(' ')
-                : error.response?.data?.message || 'Failed to update user';
+                : error.response?.data?.message || 'Gagal memperbarui pengguna';
             setError(errorMsg);
         }
     };
@@ -159,10 +159,10 @@ const AdminUsers = () => {
             if (response.data.success) {
                 setShowDeleteModal(false);
                 loadUsers();
-                alert('User deleted successfully');
+                alert('Pengguna berhasil dihapus');
             }
         } catch (error) {
-            const errorMsg = error.response?.data?.message || 'Failed to delete user';
+            const errorMsg = error.response?.data?.message || 'Gagal menghapus pengguna';
             alert(errorMsg);
         }
     };
@@ -177,18 +177,18 @@ const AdminUsers = () => {
     };
 
     if (loading) {
-        return <div className="loading">Loading users...</div>;
+        return <div className="loading">Memuat pengguna...</div>;
     }
 
     return (
         <div className="admin-users-container">
             <div className="page-header">
                 <div>
-                    <h1>User Management</h1>
-                    <p className="subtitle">Manage all users in the system</p>
+                    <h1>Manajemen Pengguna</h1>
+                    <p className="subtitle">Kelola semua pengguna dalam sistem</p>
                 </div>
                 <button className="btn-create" onClick={handleCreate}>
-                    ➕ Create New User
+                    ➕ Buat Pengguna Baru
                 </button>
             </div>
 
@@ -198,13 +198,13 @@ const AdminUsers = () => {
                 <table className="users-table">
                     <thead>
                         <tr>
-                            <th>Name</th>
+                            <th>Nama</th>
                             <th>Email</th>
                             <th>NPM/NIP</th>
-                            <th>Phone</th>
-                            <th>Role</th>
-                            <th>Joined</th>
-                            <th>Actions</th>
+                            <th>Telepon</th>
+                            <th>Peran</th>
+                            <th>Bergabung</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -226,13 +226,13 @@ const AdminUsers = () => {
                                             className="btn-edit"
                                             onClick={() => handleEdit(user)}
                                         >
-                                            Edit
+                                            Ubah
                                         </button>
                                         <button 
                                             className="btn-delete"
                                             onClick={() => handleDelete(user)}
                                         >
-                                            Delete
+                                            Hapus
                                         </button>
                                     </div>
                                 </td>
@@ -243,7 +243,7 @@ const AdminUsers = () => {
 
                 {users.length === 0 && (
                     <div className="empty-state">
-                        <p>No users found</p>
+                        <p>Tidak ada pengguna</p>
                     </div>
                 )}
             </div>
@@ -253,7 +253,7 @@ const AdminUsers = () => {
                 <div className="modal-overlay" onClick={() => setShowEditModal(false)}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                         <div className="modal-header">
-                            <h2>Edit User</h2>
+                            <h2>Ubah Pengguna</h2>
                             <button 
                                 className="modal-close"
                                 onClick={() => setShowEditModal(false)}
@@ -264,7 +264,7 @@ const AdminUsers = () => {
 
                         <form onSubmit={handleSubmitEdit}>
                             <div className="form-group">
-                                <label htmlFor="name">Full Name</label>
+                                <label htmlFor="name">Nama Lengkap</label>
                                 <input
                                     type="text"
                                     id="name"
@@ -300,7 +300,7 @@ const AdminUsers = () => {
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="phone">Phone</label>
+                                <label htmlFor="phone">Telepon</label>
                                 <input
                                     type="text"
                                     id="phone"
@@ -311,7 +311,7 @@ const AdminUsers = () => {
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="role">Role</label>
+                                <label htmlFor="role">Peran</label>
                                 <select
                                     id="role"
                                     name="role"
@@ -326,7 +326,7 @@ const AdminUsers = () => {
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="password">New Password (leave blank to keep current)</label>
+                                <label htmlFor="password">Kata Sandi Baru (kosongkan untuk mempertahankan yang lama)</label>
                                 <input
                                     type="password"
                                     id="password"
@@ -334,7 +334,7 @@ const AdminUsers = () => {
                                     value={formData.password}
                                     onChange={handleChange}
                                     minLength={8}
-                                    placeholder="Leave blank to keep current password"
+                                    placeholder="Kosongkan untuk mempertahankan kata sandi lama"
                                 />
                             </div>
 
@@ -344,10 +344,10 @@ const AdminUsers = () => {
                                     className="btn-cancel"
                                     onClick={() => setShowEditModal(false)}
                                 >
-                                    Cancel
+                                    Batal
                                 </button>
                                 <button type="submit" className="btn-save">
-                                    Save Changes
+                                    Simpan Perubahan
                                 </button>
                             </div>
                         </form>
@@ -360,7 +360,7 @@ const AdminUsers = () => {
                 <div className="modal-overlay" onClick={() => setShowCreateModal(false)}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                         <div className="modal-header">
-                            <h2>Create New User</h2>
+                            <h2>Buat Pengguna Baru</h2>
                             <button 
                                 className="modal-close"
                                 onClick={() => setShowCreateModal(false)}
@@ -371,7 +371,7 @@ const AdminUsers = () => {
 
                         <form onSubmit={handleSubmitCreate}>
                             <div className="form-group">
-                                <label htmlFor="name">Full Name</label>
+                                <label htmlFor="name">Nama Lengkap</label>
                                 <input
                                     type="text"
                                     id="name"
@@ -407,7 +407,7 @@ const AdminUsers = () => {
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="phone">Phone</label>
+                                <label htmlFor="phone">Telepon</label>
                                 <input
                                     type="text"
                                     id="phone"
@@ -418,7 +418,7 @@ const AdminUsers = () => {
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="role">Role</label>
+                                <label htmlFor="role">Peran</label>
                                 <select
                                     id="role"
                                     name="role"
@@ -430,12 +430,12 @@ const AdminUsers = () => {
                                     <option value="admin">Admin</option>
                                 </select>
                                 <small style={{color: '#718096', fontSize: '12px', marginTop: '4px', display: 'block'}}>
-                                    Students (mahasiswa) must register through the public registration form
+                                    Mahasiswa harus mendaftar melalui formulir pendaftaran publik
                                 </small>
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="password">Password</label>
+                                <label htmlFor="password">Kata Sandi Baru</label>
                                 <input
                                     type="password"
                                     id="password"
@@ -444,7 +444,7 @@ const AdminUsers = () => {
                                     onChange={handleChange}
                                     required
                                     minLength={8}
-                                    placeholder="Minimum 8 characters"
+                                    placeholder="Minimal 8 karakter"
                                 />
                             </div>
 
@@ -454,10 +454,10 @@ const AdminUsers = () => {
                                     className="btn-cancel"
                                     onClick={() => setShowCreateModal(false)}
                                 >
-                                    Cancel
+                                    Batal
                                 </button>
                                 <button type="submit" className="btn-save">
-                                    Create User
+                                    Buat Pengguna
                                 </button>
                             </div>
                         </form>
@@ -470,7 +470,7 @@ const AdminUsers = () => {
                 <div className="modal-overlay" onClick={() => setShowDeleteModal(false)}>
                     <div className="modal-content modal-small" onClick={(e) => e.stopPropagation()}>
                         <div className="modal-header">
-                            <h2>Confirm Delete</h2>
+                            <h2>Konfirmasi Hapus</h2>
                             <button 
                                 className="modal-close"
                                 onClick={() => setShowDeleteModal(false)}
@@ -480,8 +480,8 @@ const AdminUsers = () => {
                         </div>
 
                         <div className="modal-body">
-                            <p>Are you sure you want to delete user <strong>{selectedUser?.name}</strong>?</p>
-                            <p className="warning-text">This action cannot be undone.</p>
+                            <p>Apakah Anda yakin ingin menghapus pengguna <strong>{selectedUser?.name}</strong>?</p>
+                            <p className="warning-text">Tindakan ini tidak dapat dibatalkan.</p>
                         </div>
 
                         <div className="modal-actions">
@@ -490,14 +490,14 @@ const AdminUsers = () => {
                                 className="btn-cancel"
                                 onClick={() => setShowDeleteModal(false)}
                             >
-                                Cancel
+                                Batal
                             </button>
                             <button 
                                 type="button" 
                                 className="btn-delete"
                                 onClick={handleConfirmDelete}
                             >
-                                Delete User
+                                Hapus Pengguna
                             </button>
                         </div>
                     </div>
