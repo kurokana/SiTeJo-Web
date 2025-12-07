@@ -6,6 +6,7 @@ import Layout from './components/Layout';
 
 // Landing Page
 import LandingPage from './pages/LandingPage';
+import VerifyLetter from './pages/VerifyLetter';
 
 // Auth Pages
 import LoginPage from './pages/auth/LoginPage';
@@ -40,6 +41,7 @@ function App() {
             {/* Public Routes */}
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/verify-letter" element={<VerifyLetter />} />
 
             {/* Student Routes */}
             <Route

@@ -259,6 +259,12 @@ const AdminTicketDetail = () => {
                             <label>Dosen Tujuan</label>
                             <span>{ticket.lecturer?.name}</span>
                         </div>
+                        {ticket.nomor_surat && (
+                            <div className="info-item">
+                                <label>Nomor Surat</label>
+                                <span style={{ fontWeight: '600', color: '#0066CC' }}>{ticket.nomor_surat}</span>
+                            </div>
+                        )}
                         {ticket.reviewed_at && (
                             <div className="info-item">
                                 <label>Ditinjau Pada</label>
@@ -278,9 +284,7 @@ const AdminTicketDetail = () => {
                             </div>
                         )}
                     </div>
-                </div>
-
-                {/* Description */}
+                </div>                {/* Description */}
                 <div className="detail-section">
                     <h3>Deskripsi</h3>
                     <p className="description-text">{ticket.description}</p>

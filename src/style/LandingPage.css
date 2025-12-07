@@ -124,6 +124,25 @@
   box-shadow: 0 6px 20px rgba(0, 102, 204, 0.4);
 }
 
+.btn-secondary-large {
+  background: white;
+  color: #0066CC;
+  border: 2px solid #0066CC;
+  padding: 1rem 2.5rem;
+  border-radius: 6px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-secondary-large:hover {
+  background: #0066CC;
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 102, 204, 0.3);
+}
+
 .hero-image {
   display: flex;
   justify-content: center;

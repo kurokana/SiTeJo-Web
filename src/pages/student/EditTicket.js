@@ -244,17 +244,17 @@ const EditTicket = () => {
                 )}
 
                 <div className="form-group">
-                    <label htmlFor="files">Tambah Dokumen Baru (Opsional)</label>
+                    <label htmlFor="files">Tambah Dokumen Baru (Opsional - PDF)</label>
                     <input
                         type="file"
                         id="files"
                         name="files"
                         onChange={handleChange}
                         multiple
-                        accept=".pdf, .doc, .docx, .jpg, .jpeg, .png"
+                        accept=".pdf"
                     />
                     <small className="form-text">
-                        Anda dapat mengunggah beberapa file. Format yang diterima: PDF, DOC, DOCX, JPG, JPEG, PNG.
+                        Anda dapat mengunggah beberapa file PDF.
                     </small>
                     {files.length > 0 && (
                         <div className="file-list">

@@ -39,6 +39,9 @@ const LandingPage = () => {
               <button className="btn-primary-large" onClick={() => navigate('/login')}>
                 Akses Sistem
               </button>
+              <button className="btn-secondary-large" onClick={() => navigate('/verify-letter')}>
+                Verifikasi Nomor Surat
+              </button>
             </div>
           </div>
           <div className="hero-image">

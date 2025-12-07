@@ -163,17 +163,17 @@ const CreateTicket = () => {
                 </div>  
 
                 <div className="form-group">
-                    <label htmlFor="files">Lampirkan Dokumen</label>
+                    <label htmlFor="files">Lampirkan Dokumen (PDF)</label>
                     <input
                         type="file"
                         id="files"
                         name="files"
                         onChange={handleChange}
                         multiple
-                        accept=".pdf, .doc, .docx, .jpg, .jpeg, .png"
+                        accept=".pdf"
                     />
                     <small className="form-text">
-                        Anda dapat mengunggah beberapa file. Format yang diterima: PDF, DOC, DOCX, JPG, JPEG, PNG.
+                        Anda dapat mengunggah beberapa file PDF.
                     </small>
                     {files.length > 0 && (
                         <div className="file-list">

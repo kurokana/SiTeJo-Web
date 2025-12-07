@@ -134,6 +134,12 @@ const ReviewTicket = () => {
               <label>Status</label>
               <span className="badge">{ticket.status}</span>
             </div>
+            {ticket.nomor_surat && (
+              <div className="info-item">
+                <label>Nomor Surat</label>
+                <span style={{ fontWeight: '600', color: '#0066CC' }}>{ticket.nomor_surat}</span>
+              </div>
+            )}
             <div className="info-item">
               <label>Prioritas</label>
               <span className="badge">{ticket.priority}</span>
