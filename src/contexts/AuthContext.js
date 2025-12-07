@@ -47,10 +47,10 @@ export const AuthProvider = ({children}) => {
 
     const logout = async () => {
         try {
-            await authService.logout();
+            authService.logout();
             setUser(null);
         } catch (error) {
-            console.error("Logout failed", error);
+            // Logout failed
         }
     };
 

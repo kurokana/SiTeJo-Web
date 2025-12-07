@@ -17,10 +17,6 @@ const AdminTicketList = () => {
         per_page: 15,
     });
 
-    useEffect(() => {
-        loadTickets();
-    }, [filters]);
-
     const loadTickets = async () => {
         setLoading(true);
         try {
@@ -38,13 +34,16 @@ const AdminTicketList = () => {
                 total: paginationData.total || 0,
             });
         } catch (error) {
-            console.error("Failed to load tickets", error);
             setTickets([]);
             setPagination(null);
         } finally {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        loadTickets();
+    }, [filters]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleFilterChange = (e) => {
         setFilters({
@@ -61,6 +60,7 @@ const AdminTicketList = () => {
     const handleDeleteTicket = async (ticketId) => {
         if (!window.confirm("Apakah Anda yakin ingin menghapus tiket ini?")) {
             return;
+        }
         try {
             await ticketService.deleteTicket(ticketId);
             alert("Tiket berhasil dihapus");
@@ -221,7 +221,6 @@ const AdminTicketList = () => {
             )}
             </div>
         );
-    };
 };
 
 export default AdminTicketList;

@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import { ticketService } from "../../services/ticketService";
 import { documentService } from "../../services/documentService";
 import '../../style/CreateTicket.css';
 
-const CreateTicket = () => {
+const EditTicket = () => {
     const navigate = useNavigate();
+    const { id } = useParams();
     const [lecturer, setLecturer] = useState([]);
     const [formData, setFormData] = useState({
         lecturer_id: '',
@@ -15,13 +16,50 @@ const CreateTicket = () => {
         priority : 'medium',
     });
     const [files, setFiles] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [existingDocuments, setExistingDocuments] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
-    useEffect(() => {
-        loadLecturers();
-    }, []);
+    const loadTicketData = async () => {
+        try {
+            const [ticketResponse, documentsResponse] = await Promise.all([
+                ticketService.getTicketById(id),
+                documentService.getDocumentsByTicket(id)
+            ]);
+
+            let ticketData = ticketResponse.data;
+            if (ticketData && ticketData.data) {
+                ticketData = ticketData.data;
+            }
+
+            // Check if ticket can be edited (only pending or rejected)
+            if (!['pending', 'rejected'].includes(ticketData.status)) {
+                setError('Tiket hanya bisa diedit jika statusnya Menunggu atau Ditolak');
+                setTimeout(() => {
+                    navigate(`/student/tickets/${id}`);
+                }, 2000);
+                return;
+            }
+
+            setFormData({
+                lecturer_id: ticketData.lecturer_id || '',
+                title: ticketData.title || '',
+                description: ticketData.description || '',
+                type: ticketData.type || 'surat_rekomendasi',
+                priority: ticketData.priority || 'medium',
+            });
+
+            const docs = documentsResponse.data.data || documentsResponse.data || [];
+            setExistingDocuments(Array.isArray(docs) ? docs : []);
+            
+        } catch (error) {
+            setError('Gagal memuat data tiket. Silakan coba lagi nanti.');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const loadLecturers = async () => {
         try {
@@ -29,11 +67,14 @@ const CreateTicket = () => {
             const lecturersData = response.data.data || response.data || [];
             setLecturer(Array.isArray(lecturersData) ? lecturersData : []);
         } catch (error) {
-            console.error('Failed to load lecturers:', error);
-            setError('Gagal memuat dosen. Silakan coba lagi nanti.');
-            setLecturer([]);
+            // Silently fail
         }
     };
+
+    useEffect(() => {
+        loadTicketData();
+        loadLecturers();
+    }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleChange = (e) => {
         if (e.target.type === 'file') {
@@ -47,40 +88,59 @@ const CreateTicket = () => {
         }
     };
 
+    const handleDeleteDocument = async (documentId) => {
+        if (!window.confirm('Apakah Anda yakin ingin menghapus dokumen ini?')) return;
+
+        try {
+            await documentService.deleteDocument(documentId);
+            setExistingDocuments(existingDocuments.filter(doc => doc.id !== documentId));
+            alert('Dokumen berhasil dihapus!');
+        } catch (err) {
+            alert('Gagal menghapus dokumen');
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true);
+        setSubmitting(true);
         setError('');
         setSuccess('');
 
         try {
-            const response = await ticketService.createTicket(formData);
-            const ticket = response.data.data || response.data;
-            const ticketId = ticket.id;
-
+            console.log('Updating ticket with data:', formData);
+            await ticketService.updateTicket(id, formData);
+            
+            console.log('Files to upload:', files);
             if (files.length > 0) {
                 for (const file of files) {
-                    await documentService.uploadDocument(ticketId, file, 'attachment');
+                    console.log('Uploading file:', file.name);
+                    await documentService.uploadDocument(id, file, 'attachment');
                 }
+                console.log('All files uploaded successfully');
             }
 
-            setSuccess('Tiket berhasil dibuat!');
+            setSuccess('Tiket berhasil diperbarui!');
             setTimeout(() => {
                 navigate('/student/tickets');
             }, 2000);
 
         } catch (error) {
-            setError(error.message || 'Gagal membuat tiket. Silakan coba lagi.');
+            console.error('Error updating ticket:', error);
+            setError(error.response?.data?.message || 'Gagal memperbarui tiket. Silakan coba lagi.');
         } finally {
-            setLoading(false);
+            setSubmitting(false);
         }
     };
+
+    if (loading) {
+        return <div className="loading">Memuat...</div>;
+    }
 
     return (
         <div className="form-container">
             <div className="form-header">
-                <h1>Buat Tiket Baru</h1>
-                <Link to="/student/tickets" className="btn-secondary">Kembali</Link>
+                <h1>Edit Tiket</h1>
+                <Link to={`/student/tickets/${id}`} className="btn-secondary">Kembali</Link>
             </div>
 
             {error && <div className="alert alert-error">{error}</div>}
@@ -97,9 +157,9 @@ const CreateTicket = () => {
                         required
                     >
                         <option value="">-- Pilih Dosen --</option>
-                        {lecturer.map(lecturer => (
-                            <option key={lecturer.id} value={lecturer.id}>
-                                {lecturer.name} - {lecturer.email}
+                        {lecturer.map(lect => (
+                            <option key={lect.id} value={lect.id}>
+                                {lect.name} - {lect.email}
                             </option>
                         ))}
                     </select>
@@ -159,11 +219,32 @@ const CreateTicket = () => {
                         placeholder="Jelaskan permintaan Anda"
                         required
                         rows="6"
-                        />
-                </div>  
+                    />
+                </div>
+
+                {/* Existing Documents */}
+                {existingDocuments.length > 0 && (
+                    <div className="form-group">
+                        <label>Dokumen yang Sudah Ada</label>
+                        <div className="existing-documents">
+                            {existingDocuments.map((doc) => (
+                                <div key={doc.id} className="document-item">
+                                    <span>📄 {doc.file_name}</span>
+                                    <button 
+                                        type="button"
+                                        onClick={() => handleDeleteDocument(doc.id)}
+                                        className="btn-danger-small"
+                                    >
+                                        Hapus
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
                 <div className="form-group">
-                    <label htmlFor="files">Lampirkan Dokumen</label>
+                    <label htmlFor="files">Tambah Dokumen Baru (Opsional)</label>
                     <input
                         type="file"
                         id="files"
@@ -177,9 +258,8 @@ const CreateTicket = () => {
                     </small>
                     {files.length > 0 && (
                         <div className="file-list">
-                            <p>File dipilih</p>
+                            <p>File baru dipilih</p>
                             <ul>
-                                {/* eslint-disable-next-line */}
                                 {files.map((file, index) => (
                                     <li key={index}>{file.name}</li>
                                 ))}
@@ -190,13 +270,13 @@ const CreateTicket = () => {
 
                 <div className="form-action">
                     <button 
-                    type="submit" 
-                    className="btn-primary" 
-                    disabled={loading}
+                        type="submit" 
+                        className="btn-primary" 
+                        disabled={submitting}
                     >
-                        {loading ? 'Membuat Tiket...' : 'Kirim Tiket'}
+                        {submitting ? 'Memperbarui Tiket...' : 'Perbarui Tiket'}
                     </button>
-                    <Link to="/student/tickets" className="btn-secondary">
+                    <Link to={`/student/tickets/${id}`} className="btn-secondary">
                         Batal
                     </Link>
                 </div>
@@ -204,5 +284,5 @@ const CreateTicket = () => {
         </div>
     );
 };
-export default CreateTicket;
-                    
+
+export default EditTicket;

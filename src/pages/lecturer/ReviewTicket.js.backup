@@ -1,8 +1,9 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, act} from "react";
 import { useParams, useNavigate, Link  } from "react-router-dom";
 import { ticketService } from "../../services/ticketService";
 import {documentService} from "../../services/documentService";
 import '../../style/TicketsDetail.css';
+import { all } from "axios";
 
 const ReviewTicket = () => {
     const {id} = useParams();
@@ -16,24 +17,26 @@ const ReviewTicket = () => {
     const [showRejectModal, setShowRejectModal] = useState(false);
     const [rejectionReason, setRejectionReason] = useState("");
 
+    useEffect(() => {
+        loadTicketData();
+    }, [id]);
+
     const loadTicketData = async () => {
         try {
             const [ticketResponse, documentResponse] = await Promise.all([
                 ticketService.getTicketById(id),
-                documentService.getDocumentsByTicket(id)
+                documentService.getDocumentByTicketId(id)
             ]);
 
-            let ticketData = ticketResponse.data;
-            if (ticketData && ticketData.data) {
-                ticketData = ticketData.data;
-            }
+            const ticketData = ticketResponse.data.data || ticketResponse.data;
             setTicket(ticketData);
             
             const docs = documentResponse.data.data || documentResponse.data || [];
             setDocuments(Array.isArray(docs) ? docs : []);
             
-            setNotes(ticketData?.lecturer_notes || "");
+            setNotes(ticketData.lecturer_note || "");
         } catch (error) {
+            console.error("Failed to load ticket data", error);
             setTicket(null);
             setDocuments([]);
         } finally {
@@ -50,20 +53,16 @@ const ReviewTicket = () => {
         } catch (error) {
             alert('Gagal meninjau tiket');
         } finally {
-            setLoading(false);
+            setActionLoading(false);
         }
     };
-
-    useEffect(() => {
-        loadTicketData();
-    }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleApprove = async () => {
         setActionLoading(true);
         try {
             await ticketService.approveTicket(id, notes);
-            alert('Tiket berhasil disetujui!');
-            loadTicketData();
+            alert('Tiket berhasil disetujui');
+            navigate('/lecturer/dashboard');
         } catch (error) {
             alert('Gagal menyetujui tiket');
         } finally {
@@ -74,20 +73,20 @@ const ReviewTicket = () => {
 
     const handleReject = async () => {
         if (!rejectionReason.trim()) {
-            alert('Harap berikan alasan penolakan');
+            alert ('Harap berikan alasan penolakan');
             return;
         }
 
         setActionLoading(true);
         try {
-            await ticketService.rejectTicket(id, rejectionReason);
-            alert('Tiket berhasil ditolak');
-            loadTicketData();
+        await ticketService.rejectTicket(id, rejectionReason);
+        alert('Tiket ditolak');
+        navigate('/lecturer/tickets');
         } catch (err) {
-            alert('Gagal menolak tiket');
+        alert('Gagal menolak tiket');
         } finally {
-            setActionLoading(false);
-            setShowRejectModal(false);
+        setActionLoading(false);
+        setShowRejectModal(false);
         }
     };
 
@@ -128,7 +127,6 @@ const ReviewTicket = () => {
       <div className="detail-content">
         {/* Ticket Information */}
         <div className="detail-section">
-          <h3>Informasi Tiket</h3>
           <div className="info-grid">
             <div className="info-item">
               <label>Status</label>
@@ -157,14 +155,13 @@ const ReviewTicket = () => {
 
         {/* Documents */}
         <div className="detail-section">
-          <h3>Dokumen Terlampir</h3>
+          <h3>Dokumen</h3>
           {documents.length === 0 ? (
-            <p className="empty-message">Tidak ada dokumen terlampir</p>
+            <p>Tidak ada dokumen terlampir</p>
           ) : (
             <div className="documents-list">
               {documents.map((doc) => (
                 <div key={doc.id} className="document-item">
-                  <div className="document-icon">📄</div>
                   <div className="document-info">
                     <span className="document-name">{doc.file_name}</span>
                     <span className="document-meta">
@@ -173,9 +170,9 @@ const ReviewTicket = () => {
                   </div>
                   <button
                     onClick={() => handleDownload(doc.id, doc.file_name)}
-                    className="btn-download"
+                    className="btn-link"
                   >
-                    ⬇ Unduh
+                    Unduh
                   </button>
                 </div>
               ))}

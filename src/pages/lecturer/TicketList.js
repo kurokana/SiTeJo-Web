@@ -15,10 +15,6 @@ const LecturerTicketList = () => {
         per_page: 10,
     });
 
-    useEffect(() => {
-        loadTickets();
-    }, [filters]);
-
     const loadTickets = async () => {
         setLoading(true);
         try {
@@ -36,7 +32,6 @@ const LecturerTicketList = () => {
                 total: paginationData.total || 0,
             });
         } catch (error) {
-            console.error("Failed to load tickets", error);
             setTickets([]);
             setPagination(null);
         } finally {
@@ -44,16 +39,16 @@ const LecturerTicketList = () => {
         }
     };
 
+    useEffect(() => {
+        loadTickets();
+    }, [filters]); // eslint-disable-line react-hooks/exhaustive-deps
+
     const handleFilterChange = (e) => {
         setFilters({
             ...filters,
             [e.target.name]: e.target.value,
             page: 1,
         });
-    };
-
-    const handlePerPageChange = (newPerPage) => {
-        setFilters({...filters, per_page: newPerPage, page: 1});
     };
 
     const handlePageChange = (newPage) => {

@@ -62,23 +62,47 @@ export const ticketService = {
 
     reviewTicket: async (Id, notes) => {
         try {
-            return await api.post(`/tickets/${Id}/review`, { notes });
+            return await api.post(`/tickets/${Id}/review`, { lecturer_notes: notes });
         } catch (error) {
             throw error;
         }
     },
 
-    rejectTikect: async (Id, reason) => {
+    approveTicket: async (Id, notes) => {
         try {
-            return await api.post(`/tickets/${Id}/reject`, { reason });
+            return await api.post(`/tickets/${Id}/approve`, { lecturer_notes: notes });
         } catch (error) {
             throw error;
         }
     },
 
-    completeTicket: async (Id) => {
+    rejectTicket: async (Id, reason) => {
         try {
-            return await api.post(`/tickets/${Id}/complete`);
+            return await api.post(`/tickets/${Id}/reject`, { rejection_reason: reason });
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    sendToLecturer: async (Id, notes) => {
+        try {
+            return await api.post(`/tickets/${Id}/send-to-lecturer`, { admin_notes: notes });
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    adminRejectTicket: async (Id, reason) => {
+        try {
+            return await api.post(`/tickets/${Id}/reject`, { rejection_reason: reason });
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    completeTicket: async (Id, notes) => {
+        try {
+            return await api.post(`/tickets/${Id}/complete`, { admin_notes: notes });
         } catch (error) {
             throw error;
         }

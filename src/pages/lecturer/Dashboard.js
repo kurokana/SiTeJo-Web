@@ -62,21 +62,36 @@ const LecturerDashboard = () => {
 
         {/* Statistics */}
         <div className="stats-grid">
-            <div className="stat-card">
-            <h3>Total Tiket</h3>
-            <p className="stat-number">{statistics?.total || 0}</p>
-            </div>
             <div className="stat-card stat-pending">
-            <h3>Menunggu Peninjauan</h3>
-            <p className="stat-number">{statistics?.by_status?.pending || 0}</p>
+            <div className="stat-content">
+                <h3>Menunggu</h3>
+                <p className="stat-number">{statistics?.by_status?.pending || 0}</p>
+            </div>
             </div>
             <div className="stat-card stat-review">
-            <h3>Sedang Ditinjau</h3>
-            <p className="stat-number">{statistics?.by_status?.in_review || 0}</p>
+            <div className="stat-content">
+                <h3>Sedang Ditinjau</h3>
+                <p className="stat-number">{statistics?.by_status?.in_review || 0}</p>
+            </div>
             </div>
             <div className="stat-card stat-approved">
-            <h3>Disetujui</h3>
-            <p className="stat-number">{statistics?.by_status?.approved || 0}</p>
+            <div className="stat-content">
+                <h3>Disetujui</h3>
+                <p className="stat-number">{statistics?.by_status?.approved || 0}</p>
+            </div>
+            </div>
+            <div className="stat-card stat-rejected">
+            <div className="stat-content">
+                <h3>Ditolak</h3>
+                <p className="stat-number">{statistics?.by_status?.rejected || 0}</p>
+            </div>
+            </div>
+            <div className="stat-card stat-completed">
+            <div className="stat-icon">✓✓</div>
+            <div className="stat-content">
+                <h3>Selesai</h3>
+                <p className="stat-number">{statistics?.by_status?.completed || 0}</p>
+            </div>
             </div>
         </div>
 

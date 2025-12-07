@@ -1,11 +1,11 @@
-import React, {use, useState} from "react";
-import {useNavigate, Link} from "react-router-dom";
+import React, {useState} from "react";
+import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../contexts/AuthContext";
 import '../../style/Auth.css';
 
 const LoginPage = () => {
     const [formData, setFormData] = useState ({
-        email: '',
+        identifier: '',
         password: ''
     });
 
@@ -48,20 +48,27 @@ const LoginPage = () => {
     return (
         <div className = "auth-container">
             <div className="auth-card">
-                <h1>Masuk</h1>
-                <p className="auth-subtitle">Selamat datang kembali! Silakan masuk ke akun Anda.</p>
+                <div className="auth-logo">
+                    <img src="/unila-logo.png" alt="Universitas Lampung" />
+                </div>
+                <div className="sso-header">
+                    <h1>Login SSO</h1>
+                    <p className="auth-subtitle">Universitas Lampung</p>
+                    <p className="auth-subtitle-small">Sistem Ticketing Jurusan Ilmu Komputer</p>
+                </div>
                 
                 {error && <div className="auth-error">{error}</div>}
 
                 <form onSubmit={handleSubmit}>
                     <div className="auth-form-group">
-                        <label htmlFor="email">Email</label>
+                        <label htmlFor="identifier">NPM / Email / Username</label>
                         <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value={formData.email}
+                            type="text"
+                            id="identifier"
+                            name="identifier"
+                            value={formData.identifier}
                             onChange={handleChange}
+                            placeholder="Masukkan NPM, Email, atau Username"
                             required
                         />
                     </div>
@@ -84,9 +91,14 @@ const LoginPage = () => {
                     </button>
                 </form>
 
-                <p className="auth-footer">
-                    Belum punya akun? <Link to="/register">Daftar di sini</Link>
-                </p>
+                <div className="auth-footer">
+                    <p className="sso-info">Login menggunakan akun SSO Universitas Lampung</p>
+                    <p className="sso-help">Mahasiswa: gunakan NPM sebagai username dan password</p>
+                    <p className="sso-help">Dosen/Admin: gunakan email dan password yang diberikan</p>
+                    <div className="back-to-home">
+                        <a href="/">← Kembali ke Beranda</a>
+                    </div>
+                </div>
             </div>
         </div>
     );

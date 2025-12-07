@@ -9,17 +9,18 @@ export const documentService = {
         }
     }, 
 
-    uploadDocument: async (ticketId, file, documentsType) => {
+    uploadDocument: async (ticketId, file, documentType) => {
         try {
             const formData = new FormData();
             formData.append('file', file);
-            formData.append('documentsType', documentsType);
+            formData.append('document_type', documentType);
 
-            return await api.post('/tickets/${ticketId}/documents', formData, {
+            const response = await api.post(`/tickets/${ticketId}/documents`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
+            return response;
         } catch (error) {
             throw error;
         }
@@ -30,7 +31,7 @@ export const documentService = {
             const response = await api.get(`/documents/${documentId}/download`, {
                 responseType: 'blob',
             });
-            return response;
+            return response.data;
         } catch (error) {
             throw error;
         }

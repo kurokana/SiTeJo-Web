@@ -16,10 +16,6 @@ const TicketList = () => {
         per_page: 10,
     });
 
-    useEffect(() => {
-        loadTickets();
-    }, [filters]);  
-    
     const loadTickets = async () => {
         setLoading(true);
         try {
@@ -41,6 +37,10 @@ const TicketList = () => {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        loadTickets();
+    }, [filters]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleFilterChange = (e) => {
         setFilters({

@@ -6,3 +6,41 @@
   max-width: 800px;
   margin: 0 auto;
 }
+
+/* Existing documents list */
+.existing-documents {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.existing-documents .document-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: #f5f5f5;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.existing-documents .document-item span {
+  flex: 1;
+  font-size: 14px;
+}
+
+.btn-danger-small {
+  padding: 5px 10px;
+  font-size: 12px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-danger-small:hover {
+  background-color: #c82333;
+}

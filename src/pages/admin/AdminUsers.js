@@ -22,10 +22,6 @@ const AdminUsers = () => {
 
     const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
 
-    useEffect(() => {
-        loadUsers();
-    }, []);
-
     const loadUsers = async () => {
         try {
             setLoading(true);
@@ -43,6 +39,10 @@ const AdminUsers = () => {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        loadUsers();
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleEdit = (user) => {
         setSelectedUser(user);

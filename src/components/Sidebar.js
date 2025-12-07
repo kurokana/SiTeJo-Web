@@ -20,20 +20,20 @@ const Sidebar = () => {
   const getMenuItems = () => {
     if (user?.role === 'mahasiswa') {
       return [
-        { path: '/student/dashboard', icon: '📊', label: 'Beranda' },
-        { path: '/student/tickets', icon: '🎫', label: 'Tiket Saya' },
-        { path: '/student/create-ticket', icon: '➕', label: 'Buat Tiket' },
+        { path: '/student/dashboard', label: 'Beranda' },
+        { path: '/student/tickets', label: 'Tiket Saya' },
+        { path: '/student/create-ticket', label: 'Buat Tiket' },
       ];
     } else if (user?.role === 'dosen') {
       return [
-        { path: '/lecturer/dashboard', icon: '📊', label: 'Beranda' },
-        { path: '/lecturer/tickets', icon: '🎫', label: 'Semua Tiket' },
+        { path: '/lecturer/dashboard', label: 'Beranda' },
+        { path: '/lecturer/tickets', label: 'Semua Tiket' },
       ];
     } else if (user?.role === 'admin') {
       return [
-        { path: '/admin/dashboard', icon: '📊', label: 'Beranda' },
-        { path: '/admin/tickets', icon: '🎫', label: 'Semua Tiket' },
-        { path: '/admin/users', icon: '👥', label: 'Pengguna' },
+        { path: '/admin/dashboard', label: 'Beranda' },
+        { path: '/admin/tickets', label: 'Semua Tiket' },
+        { path: '/admin/users', label: 'Pengguna' },
       ];
     }
     return [];
@@ -44,8 +44,8 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
       <div className="sidebar-header">
-        <h2 className="sidebar-logo">📋 SiTeJo</h2>
-        <p className="sidebar-subtitle">Sistem Tiket</p>
+        <h2 className="sidebar-logo">⚡ SiTeJo</h2>
+        <p className="sidebar-subtitle">Sistem Tiketing Jurusan Elektro</p>
       </div>
 
       <div className="sidebar-user">

@@ -4,13 +4,16 @@ import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 
+// Landing Page
+import LandingPage from './pages/LandingPage';
+
 // Auth Pages
 import LoginPage from './pages/auth/LoginPage';
-import RegisterPage from './pages/auth/RegisterPage';
 
 // Student Pages
 import StudentDashboard from './pages/student/Dashboard';
 import CreateTicket from './pages/student/CreateTicket';
+import EditTicket from './pages/student/EditTicket';
 import TicketList from './pages/student/TicketList';
 import TicketDetail from './pages/student/TicketDetail';
 
@@ -35,11 +38,8 @@ function App() {
         <div className="App">
           <Routes>
             {/* Public Routes */}
+            <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            
-            {/* Default redirect */}
-            <Route path="/" element={<Navigate to="/login" replace />} />
 
             {/* Student Routes */}
             <Route
@@ -68,6 +68,16 @@ function App() {
                 <ProtectedRoute allowedRoles={['mahasiswa']}>
                   <Layout>
                     <CreateTicket />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/student/tickets/:id/edit"
+              element={
+                <ProtectedRoute allowedRoles={['mahasiswa']}>
+                  <Layout>
+                    <EditTicket />
                   </Layout>
                 </ProtectedRoute>
               }
