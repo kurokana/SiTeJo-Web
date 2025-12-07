@@ -2,20 +2,24 @@
   padding: 20px;
   max-width: 1000px;
   margin: 0 auto;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  min-height: 100vh;
 }
 
 .ticket-info {
   background: white;
   padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.1);
   margin-bottom: 20px;
+  border-top: 4px solid #0066CC;
 }
 
 .ticket-info h2 {
-  color: #333;
+  color: #0066CC;
   margin-bottom: 15px;
   font-size: 24px;
+  font-weight: 700;
 }
 
 .ticket-meta {
@@ -50,14 +54,16 @@
 .ticket-history {
   background: white;
   padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.1);
   margin-bottom: 20px;
+  border-top: 4px solid #0066CC;
 }
 
 .ticket-history h3 {
-  color: #333;
+  color: #0066CC;
   margin-bottom: 20px;
+  font-weight: 700;
   font-size: 20px;
 }
 

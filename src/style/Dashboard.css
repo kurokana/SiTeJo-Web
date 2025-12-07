@@ -1,14 +1,14 @@
 .dashboard-container {
   min-height: 100vh;
-  background-color: #f5f7fa;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   padding: 20px;
 }
 
 .dashboard-header {
-  background: white;
+  background: linear-gradient(135deg, #0066CC 0%, #004080 100%);
   padding: 24px 32px;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 102, 204, 0.2);
   margin-bottom: 24px;
   display: flex;
   justify-content: space-between;
@@ -17,14 +17,14 @@
 
 .dashboard-header h1 {
   font-size: 24px;
-  color: #1a202c;
+  color: white;
   margin: 0 0 4px 0;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .dashboard-header p {
   font-size: 14px;
-  color: #718096;
+  color: rgba(255, 255, 255, 0.9);
   margin: 0;
 }
 
@@ -54,14 +54,15 @@
 .stat-card {
   background: white;
   padding: 24px;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.1);
+  transition: all 0.3s;
+  border-left: 4px solid #0066CC;
 }
 
 .stat-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
 }
 
 .stat-card h3 {
@@ -76,15 +77,15 @@
 .stat-number {
   font-size: 36px;
   font-weight: 700;
-  color: #2d3748;
+  color: #0066CC;
   margin: 0;
 }
 
 .quick-actions {
   background: white;
   padding: 24px;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.1);
   margin-bottom: 24px;
   display: flex;
   gap: 12px;
@@ -94,22 +95,25 @@
 .quick-actions .btn-primary,
 .quick-actions .btn-secondary {
   padding: 12px 24px;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   text-decoration: none;
-  transition: all 0.2s;
+  transition: all 0.3s;
   display: inline-block;
 }
 
 .quick-actions .btn-primary {
-  background-color: #3182ce;
+  background: linear-gradient(135deg, #0066CC 0%, #004080 100%);
   color: white;
   border: none;
+  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
 }
 
 .quick-actions .btn-primary:hover {
-  background-color: #2c5282;
+  background: linear-gradient(135deg, #0052A3 0%, #003366 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 102, 204, 0.4);
 }
 
 .quick-actions .btn-secondary {

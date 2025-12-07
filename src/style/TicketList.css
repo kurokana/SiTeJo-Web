@@ -1,6 +1,6 @@
 .ticket-list-container {
   min-height: 100vh;
-  background-color: #f5f7fa;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   padding: 24px;
   max-width: 1400px;
   margin: 0 auto;
@@ -8,10 +8,10 @@
 
 .list-header,
 .ticket-header {
-  background: white;
+  background: linear-gradient(135deg, #0066CC 0%, #004080 100%);
   padding: 24px 32px;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 102, 204, 0.2);
   margin-bottom: 24px;
   display: flex;
   justify-content: space-between;
@@ -21,9 +21,9 @@
 .list-header h1,
 .ticket-header h1 {
   font-size: 28px;
-  color: #1a202c;
+  color: white;
   margin: 0;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .filter-section,
@@ -31,12 +31,13 @@
   background: white;
   padding: 28px 32px;
   border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.1);
   margin-bottom: 24px;
   display: grid;
   grid-template-columns: 2fr 1.2fr 1.2fr 1.2fr;
   gap: 16px;
   align-items: center;
+  border-top: 3px solid #0066CC;
 }
 
 .search-input {

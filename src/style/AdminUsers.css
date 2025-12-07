@@ -2,6 +2,8 @@
     padding: 24px;
     max-width: 1400px;
     margin: 0 auto;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    min-height: 100vh;
 }
 
 .page-header {
@@ -13,8 +15,8 @@
 
 .page-header h1 {
     font-size: 28px;
-    font-weight: 600;
-    color: #1a202c;
+    font-weight: 700;
+    color: #0066CC;
     margin: 0 0 8px 0;
 }
 
@@ -26,23 +28,24 @@
 
 .btn-create {
     padding: 10px 20px;
-    background: #48bb78;
+    background: linear-gradient(135deg, #0066CC 0%, #004080 100%);
     color: white;
     border: none;
     border-radius: 8px;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s;
     display: flex;
     align-items: center;
     gap: 8px;
+    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
 }
 
 .btn-create:hover {
-    background: #38a169;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(72, 187, 120, 0.3);
+    background: linear-gradient(135deg, #0052A3 0%, #003366 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 102, 204, 0.4);
 }
 
 .error-message {

@@ -54,7 +54,7 @@ const LoginPage = () => {
                 <div className="sso-header">
                     <h1>Login SSO</h1>
                     <p className="auth-subtitle">Universitas Lampung</p>
-                    <p className="auth-subtitle-small">Sistem Ticketing Jurusan Ilmu Komputer</p>
+                    <p className="auth-subtitle-small">Sistem Ticketing Jurusan Teknik Elektro</p>
                 </div>
                 
                 {error && <div className="auth-error">{error}</div>}

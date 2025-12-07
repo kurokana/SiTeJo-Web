@@ -44,8 +44,11 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
       <div className="sidebar-header">
-        <h2 className="sidebar-logo">⚡ SiTeJo</h2>
-        <p className="sidebar-subtitle">Sistem Tiketing Jurusan Elektro</p>
+        <div className="sidebar-logo-container">
+          <img src="/unila-logo.png" alt="Unila" className="sidebar-logo-img" />
+        </div>
+        <h2 className="sidebar-logo">SiTeJo</h2>
+        <p className="sidebar-subtitle">Sistem Ticketing Jurusan Teknik Elektro</p>
       </div>
 
       <div className="sidebar-user">
