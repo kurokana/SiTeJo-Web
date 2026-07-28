@@ -1,70 +1,93 @@
-# Getting Started with Create React App
+# SiTeJo Web
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+SiTeJo Web adalah aplikasi frontend untuk Sistem Informasi Ticketing Persetujuan Tanda Tangan di Jurusan Teknik Elektro Universitas Lampung. Aplikasi ini membantu mahasiswa mengajukan surat, dosen meninjau pengajuan, dan admin mengelola alur persetujuan dalam satu dashboard yang terstruktur.
 
-## Available Scripts
+## Gambaran Singkat
 
-In the project directory, you can run:
+- Pengajuan surat dilakukan secara digital.
+- Status tiket dapat dipantau secara real-time.
+- Hak akses dibedakan berdasarkan peran pengguna.
+- Tersedia verifikasi nomor surat untuk pengecekan dokumen.
 
-### `npm start`
+## Fitur Utama
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Landing page informatif untuk memperkenalkan sistem.
+- Login berbasis autentikasi pengguna.
+- Dashboard terpisah untuk mahasiswa, dosen, dan admin.
+- Pembuatan, pengeditan, dan pemantauan tiket oleh mahasiswa.
+- Review dan persetujuan tiket oleh dosen.
+- Manajemen pengguna dan monitoring tiket oleh admin.
+- Halaman verifikasi surat untuk validasi nomor surat.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Peran Pengguna
 
-### `npm test`
+- Mahasiswa: membuat tiket, mengunggah dokumen pendukung, dan memantau status pengajuan.
+- Dosen: meninjau tiket, memberikan persetujuan, atau menambahkan catatan perbaikan.
+- Admin: mengelola pengguna, memantau seluruh tiket, dan meneruskan proses sesuai kebutuhan.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Teknologi
 
-### `npm run build`
+- React 18
+- React Router DOM 6
+- Axios
+- Create React App
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Menjalankan Proyek
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 1. Install dependensi
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+npm install
+```
 
-### `npm run eject`
+### 2. Jalankan mode development
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+npm start
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Aplikasi akan berjalan di [http://localhost:3000](http://localhost:3000).
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### 3. Build untuk production
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+npm run build
+```
 
-## Learn More
+Hasil build akan tersedia di folder `build`.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Script yang Tersedia
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- `npm start` - menjalankan aplikasi dalam mode development.
+- `npm run build` - membuat versi production.
+- `npm test` - menjalankan test runner interaktif.
+- `npm run eject` - membuka konfigurasi bawaan CRA secara penuh.
 
-### Code Splitting
+## Struktur Folder
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```text
+src/
+	components/   komponen umum seperti layout, sidebar, dan protected route
+	contexts/     context autentikasi
+	pages/        halaman landing, auth, student, lecturer, dan admin
+	services/     layer komunikasi ke API
+	style/        file CSS per halaman dan komponen
+	utils/        helper umum
+```
 
-### Analyzing the Bundle Size
+## Alur Akses
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+1. Pengguna membuka landing page.
+2. Pengguna login sesuai peran masing-masing.
+3. Sistem mengarahkan ke dashboard yang sesuai.
+4. Proses tiket berjalan sesuai otorisasi: mahasiswa mengajukan, dosen meninjau, admin memantau.
 
-### Making a Progressive Web App
+## Catatan
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- Proyek ini menggunakan routing berbasis proteksi role.
+- Beberapa halaman bergantung pada layanan API di folder `src/services`.
+- Jika backend belum aktif, beberapa fitur seperti login dan pengelolaan tiket tidak dapat berjalan penuh.
 
-### Advanced Configuration
+## Tampilan Halaman
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Halaman utama menampilkan identitas Universitas Lampung, penjelasan sistem, alur proses pengajuan, dan tombol cepat menuju login atau verifikasi surat.
